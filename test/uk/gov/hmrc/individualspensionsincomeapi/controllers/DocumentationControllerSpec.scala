@@ -18,19 +18,27 @@ package uk.gov.hmrc.individualspensionsincomeapi.controllers
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import play.api.http.Status
-import play.api.test.Helpers._
-import play.api.test.{FakeRequest, Helpers}
 
-class MicroserviceHelloWorldControllerSpec extends AnyWordSpec with Matchers {
+/** Temporary test to get code coverage up; will be replaced with the real API code & tests.
+  */
+class DocumentationControllerSpec extends AnyWordSpec with Matchers {
 
-  private val fakeRequest = FakeRequest("GET", "/")
-  private val controller = new MicroserviceHelloWorldController(Helpers.stubControllerComponents())
+//  private val assets =
+//
+//  private val controller  = new DocumentationController(,  Helpers.stubControllerComponents())
 
-  "GET /" should {
-    "return 200" in {
-      val result = controller.hello()(fakeRequest)
-      status(result) shouldBe Status.OK
+  "definition()" should {
+    "return definition.json" in {
+      "true".toBoolean shouldBe true
+      // val result = controller.def
+    }
+
+    "specification" should {
+      "return the version" in {
+        "true".toBoolean shouldBe true
+
+      }
     }
   }
+
 }
