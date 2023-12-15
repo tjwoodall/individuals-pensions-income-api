@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.individualspensionsincomeapi.controllers
+package config
 
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
+import com.google.inject.AbstractModule
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.Future
+class PensionsIncomePlayModule extends AbstractModule {
 
-@Singleton()
-class MicroserviceHelloWorldController @Inject() (cc: ControllerComponents) extends BackendController(cc) {
-
-  def hello(): Action[AnyContent] = Action.async {
-    Future.successful(Ok("Hello world"))
+  override def configure(): Unit = {
+    bind(classOf[AppConfig]).asEagerSingleton()
   }
 
 }
