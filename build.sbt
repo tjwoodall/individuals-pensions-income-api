@@ -40,7 +40,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     resolvers += Resolver.jcenterRepo
   )
-  .settings(PlayKeys.playDefaultPort := 7761)
+  .settings(PlayKeys.playDefaultPort := 7762)
 
 val appName = "individuals-pensions-income-api"
 
