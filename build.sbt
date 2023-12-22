@@ -2,6 +2,8 @@ import sbt._
 import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings}
 import uk.gov.hmrc.SbtAutoBuildPlugin
 
+val appName = "individuals-pensions-income-api"
+
 lazy val ItTest = config("it") extend Test
 
 lazy val microservice = Project(appName, file("."))
@@ -23,7 +25,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources"
   )
-  .settings(majorVersion := 0) // TODO change to 1 once a build tag is available on github (gets around "Invalid majorVersion: 1" sbt error)
+  .settings(majorVersion := 0)
   .settings(CodeCoverageSettings.settings: _*)
   .settings(defaultSettings(): _*)
   .configs(ItTest)
@@ -41,8 +43,6 @@ lazy val microservice = Project(appName, file("."))
     resolvers += Resolver.jcenterRepo
   )
   .settings(PlayKeys.playDefaultPort := 7762)
-
-val appName = "individuals-pensions-income-api"
 
 dependencyUpdatesFilter -= moduleFilter(organization = "com.typesafe.play")
 dependencyUpdatesFilter -= moduleFilter(name = "simple-reactivemongo")
