@@ -2,15 +2,15 @@
   "scopes": [
   ],
   "api": {
-    "name": "Hello World",
-    "description": "A 'hello world' example of an API on the HMRC API Developer Hub.",
-    "context": "discuss-with-the-api-platform-team",
-    "categories": ["OTHER"],
+    "name": "Individuals Pensions Income API",
+    "description": "An API for providing individual pensions income data.",
+    "context": "individuals/pensions-income",
+    "categories": ["INCOME_TAX_MTD"],
     "versions": [
       {
         "version": "1.0",
-        "status": "ALPHA",
-        "endpointsEnabled": false
+        "status": "BETA",
+        "endpointsEnabled": true
       }
     ]
   }
