@@ -1,2 +1,2 @@
-GET        /api/definition                 uk.gov.hmrc.individualspensionsincomeapi.controllers.DocumentationController.definition()
-GET        /api/conf/:version/*file        uk.gov.hmrc.individualspensionsincomeapi.controllers.DocumentationController.specification(version, file)
+GET        /api/definition                                  shared.controllers.DocumentationController.definition()
+GET        /api/conf/:version/*file                         shared.controllers.DocumentationController.asset(version, file)

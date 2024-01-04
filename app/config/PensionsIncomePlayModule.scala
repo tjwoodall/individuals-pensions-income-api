@@ -17,6 +17,7 @@
 package config
 
 import com.google.inject.AbstractModule
+import shared.config.AppConfig
 
 class PensionsIncomePlayModule extends AbstractModule {
 
