@@ -50,5 +50,5 @@ tags:
     description: Resources relating to an individual's pensions income (please note, an occupational pension is classed as pensions income and is identified by the occupationalPension property)
 
 paths:
-  /individuals/income-received/pensions/{nino}/{taxYear}:
+  /individuals/pensions-income/{nino}/{taxYear}:
     $ref: "./pensions.yaml"
