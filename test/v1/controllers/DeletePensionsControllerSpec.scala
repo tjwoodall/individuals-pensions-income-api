@@ -20,6 +20,7 @@ import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
+import shared.config.MockAppConfig
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
@@ -34,7 +35,8 @@ class DeletePensionsControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
     with MockDeletePensionsService
-    with MockDeletePensionsRequestParser {
+    with MockDeletePensionsRequestParser
+    with MockAppConfig {
 
   private val taxYear = "2021-22"
 

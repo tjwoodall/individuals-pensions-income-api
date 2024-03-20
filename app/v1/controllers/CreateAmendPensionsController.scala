@@ -19,6 +19,7 @@ package v1.controllers
 import api.controllers.{AuthorisedController, RequestContext, RequestHandler}
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContentAsJson, ControllerComponents}
+import shared.config.AppConfig
 import shared.controllers.{AuditHandler, EndpointLogContext}
 import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import shared.utils.IdGenerator
@@ -36,7 +37,7 @@ class CreateAmendPensionsController @Inject() (val authService: EnrolmentsAuthSe
                                                service: CreateAmendPensionsService,
                                                auditService: AuditService,
                                                cc: ControllerComponents,
-                                               val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+                                               val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =

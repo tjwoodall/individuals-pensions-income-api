@@ -83,6 +83,9 @@ class AppConfig @Inject() (config: ServicesConfig, configuration: Configuration)
     config.getConfBool(key, defBool = false)
   }
 
+  def allowRequestCannotBeFulfilledHeader(version: Version): Boolean =
+    config.getBoolean(s"api.$version.endpoints.allow-request-cannot-be-fulfilled-header")
+
   def endpointReleasedInProduction(version: String, name: String): Boolean = {
     val versionReleasedInProd = apiVersionReleasedInProduction(version)
     val path                  = s"api.$version.endpoints.released-in-production.$name"

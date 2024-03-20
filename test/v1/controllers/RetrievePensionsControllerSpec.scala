@@ -18,6 +18,7 @@ package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import play.api.mvc.Result
+import shared.config.MockAppConfig
 import shared.models.domain.{Nino, TaxYear, Timestamp}
 import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
@@ -34,7 +35,8 @@ class RetrievePensionsControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
     with MockRetrievePensionsService
-    with MockRetrievePensionsRequestParser {
+    with MockRetrievePensionsRequestParser
+    with MockAppConfig {
 
   private val taxYear = "2019-20"
 
