@@ -18,6 +18,7 @@ package v1.controllers
 
 import api.controllers._
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import shared.config.AppConfig
 import shared.controllers.{AuditHandler, EndpointLogContext}
 import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import shared.utils.IdGenerator
@@ -35,7 +36,7 @@ class DeletePensionsController @Inject() (val authService: EnrolmentsAuthService
                                           service: DeletePensionsService,
                                           auditService: AuditService,
                                           cc: ControllerComponents,
-                                          val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+                                          val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =

@@ -74,6 +74,9 @@ trait MockAppConfig extends MockFactory {
       (() => mockAppConfig.confidenceLevelConfig).expects()
 
     def mtdNrsProxyBaseUrl: CallHandler0[String] = (() => mockAppConfig.mtdNrsProxyBaseUrl).expects()
+
+    def allowRequestCannotBeFulfilledHeader(version: Version): CallHandler[Boolean] =
+      (mockAppConfig.allowRequestCannotBeFulfilledHeader: Version => Boolean).expects(version)
   }
 
 }
