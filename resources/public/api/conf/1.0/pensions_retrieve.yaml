@@ -1,5 +1,4 @@
-summary:
-  Retrieve Pensions Income
+summary: Retrieve Pensions Income [Test only]
 description: |
   This endpoint allows the developer to retrieve foreign pensions and overseas pension contributions. 
   A National Insurance number and tax year must be provided.
