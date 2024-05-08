@@ -19,7 +19,7 @@ package api.connectors
 import org.scalamock.handlers.CallHandler
 import play.api.http.{HeaderNames, MimeTypes, Status}
 import shared.UnitSpec
-import shared.config.MockAppConfig
+import shared.config.{DownstreamConfig, MockAppConfig}
 import shared.mocks.MockHttpClient
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -47,16 +47,16 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
 
   val dummyIfsHeaderCarrierConfig: HeaderCarrier.Config =
     HeaderCarrier.Config(
-      Seq("^not-test-BaseUrl?$".r),
+      List("^not-test-BaseUrl?$".r),
       Seq.empty[String],
-      Some("individuals-income-received-api")
+      Some("individuals-pensions-income-api")
     )
 
   val dummyHeaderCarrierConfig: HeaderCarrier.Config =
     HeaderCarrier.Config(
-      Seq("^not-test-BaseUrl?$".r),
+      List("^not-test-BaseUrl?$".r),
       Seq.empty[String],
-      Some("individuals-income-received-api")
+      Some("individuals-pensions-income-api")
     )
 
   val allowedDesHeaders: Seq[String] = List(
@@ -161,6 +161,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
     MockedAppConfig.desToken returns "des-token"
     MockedAppConfig.desEnvironment returns "des-environment"
     MockedAppConfig.desEnvironmentHeaders returns Some(allowedDesHeaders)
+    MockedAppConfig.desDownstreamConfig.anyNumberOfTimes() returns DownstreamConfig(this.baseUrl, "des-environment", "des-token", Some(allowedDesHeaders))
   }
 
   protected trait IfsTest extends ConnectorTest {
@@ -171,6 +172,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
     MockedAppConfig.ifsToken returns "ifs-token"
     MockedAppConfig.ifsEnvironment returns "ifs-environment"
     MockedAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
+    MockedAppConfig.ifsDownstreamConfig.anyNumberOfTimes() returns DownstreamConfig(this.baseUrl, "ifs-environment", "ifs-token", Some(allowedIfsHeaders))
   }
 
   protected trait TysIfsTest extends ConnectorTest {
@@ -181,6 +183,8 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
     MockedAppConfig.tysIfsToken returns "TYS-IFS-token"
     MockedAppConfig.tysIfsEnvironment returns "TYS-IFS-environment"
     MockedAppConfig.tysIfsEnvironmentHeaders returns Some(allowedIfsHeaders)
+    MockedAppConfig.tysIfsDownstreamConfig
+      .anyNumberOfTimes() returns DownstreamConfig(this.baseUrl, "TYS-IFS-environment", "TYS-IFS-token", Some(allowedIfsHeaders))
   }
 
 }
