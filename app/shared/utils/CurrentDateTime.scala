@@ -15,15 +15,13 @@
  */
 
 package shared.utils
+import java.time.{LocalDateTime, ZoneOffset, LocalDate}
 
-import org.joda.time.{DateTime, DateTimeZone}
-
-import java.time.LocalDate
 import javax.inject.Singleton
 
 @Singleton
 class CurrentDateTime {
-  def getDateTime: DateTime = DateTime.now(DateTimeZone.UTC)
+  def getDateTime: LocalDateTime = LocalDateTime.now(ZoneOffset.UTC)
 
   def getLocalDate: LocalDate = LocalDate.now()
 }
