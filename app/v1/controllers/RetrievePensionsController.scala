@@ -16,7 +16,7 @@
 
 package v1.controllers
 
-import api.controllers.{AuthorisedController, RequestContext, RequestHandler}
+import api.controllers.{AuthorisedController, RequestContext, RequestHandlerOld}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import shared.config.AppConfig
 import shared.controllers.EndpointLogContext
@@ -53,7 +53,7 @@ class RetrievePensionsController @Inject() (val authService: EnrolmentsAuthServi
         taxYear = taxYear
       )
 
-      val requestHandler = RequestHandler
+      val requestHandler = RequestHandlerOld
         .withParser(parser)
         .withService(service.retrievePensions)
         .withPlainJsonResult()

@@ -19,7 +19,7 @@ package v1.controllers
 import api.controllers._
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import shared.config.AppConfig
-import shared.controllers.{AuditHandler, EndpointLogContext}
+import shared.controllers.{AuditHandlerOld, EndpointLogContext}
 import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import shared.utils.IdGenerator
 import v1.controllers.requestParsers.DeletePensionsRequestParser
@@ -54,12 +54,12 @@ class DeletePensionsController @Inject() (val authService: EnrolmentsAuthService
         taxYear = taxYear
       )
 
-      val requestHandler = RequestHandler
+      val requestHandler = RequestHandlerOld
         .withParser(parser)
         .withService(service.deletePensions)
         .withNoContentResult()
         .withAuditing(
-          AuditHandler(
+          AuditHandlerOld(
             auditService,
             auditType = "DeletePensionsIncome",
             transactionName = "delete-pensions-income",

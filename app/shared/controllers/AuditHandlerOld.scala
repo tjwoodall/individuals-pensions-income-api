@@ -17,7 +17,7 @@
 package shared.controllers
 
 import api.controllers.{RequestContext, RequestContextImplicits}
-import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail, GenericAuditDetail}
+import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail, GenericAuditDetailOld}
 import cats.syntax.either._
 import play.api.libs.json.{JsValue, Writes}
 import shared.models.auth.UserDetails
@@ -26,7 +26,7 @@ import shared.services.AuditService
 
 import scala.concurrent.ExecutionContext
 
-trait AuditHandler extends RequestContextImplicits {
+trait AuditHandlerOld extends RequestContextImplicits {
 
   def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]])(implicit
       ctx: RequestContext,
@@ -34,7 +34,7 @@ trait AuditHandler extends RequestContextImplicits {
 
 }
 
-object AuditHandler {
+object AuditHandlerOld {
 
   trait AuditDetailCreator[A] {
     def createAuditDetail(userDetails: UserDetails, requestBody: Option[JsValue], auditResponse: AuditResponse)(implicit ctx: RequestContext): A
@@ -45,8 +45,8 @@ object AuditHandler {
                         transactionName: String,
                         auditDetailCreator: AuditDetailCreator[A],
                         requestBody: Option[JsValue] = None,
-                        includeResponse: Boolean = false): AuditHandler =
-    new AuditHandlerImpl[A](
+                        includeResponse: Boolean = false): AuditHandlerOld =
+    new AuditHandlerOldImpl[A](
       auditService = auditService,
       auditType = auditType,
       transactionName = transactionName,
@@ -60,12 +60,12 @@ object AuditHandler {
             transactionName: String,
             params: Map[String, String],
             requestBody: Option[JsValue] = None,
-            includeResponse: Boolean = false): AuditHandler = {
+            includeResponse: Boolean = false): AuditHandlerOld = {
     custom(
       auditService = auditService,
       auditType = auditType,
       transactionName = transactionName,
-      auditDetailCreator = GenericAuditDetail.auditDetailCreator(params),
+      auditDetailCreator = GenericAuditDetailOld.auditDetailCreator(params),
       requestBody = requestBody,
       includeResponse = includeResponse
     )
@@ -76,7 +76,7 @@ object AuditHandler {
                         transactionName: String,
                         params: Map[String, String],
                         requestBody: Option[JsValue] = None,
-                        includeResponse: Boolean = false): AuditHandler = {
+                        includeResponse: Boolean = false): AuditHandlerOld = {
     custom(
       auditService = auditService,
       auditType = auditType,
@@ -87,13 +87,13 @@ object AuditHandler {
     )
   }
 
-  private class AuditHandlerImpl[A](auditService: AuditService,
-                                    auditType: String,
-                                    transactionName: String,
-                                    auditDetailCreator: AuditDetailCreator[A],
-                                    requestBody: Option[JsValue],
-                                    responseBodyMap: Option[JsValue] => Option[JsValue])(implicit writer: Writes[A])
-      extends AuditHandler {
+  private class AuditHandlerOldImpl[A](auditService: AuditService,
+                                       auditType: String,
+                                       transactionName: String,
+                                       auditDetailCreator: AuditDetailCreator[A],
+                                       requestBody: Option[JsValue],
+                                       responseBodyMap: Option[JsValue] => Option[JsValue])(implicit writer: Writes[A])
+      extends AuditHandlerOld {
 
     def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]])(implicit
         ctx: RequestContext,

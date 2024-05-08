@@ -21,7 +21,7 @@ import play.api.libs.json.{JsValue, Json}
 import shared.UnitSpec
 import shared.models.errors.TaxYearFormatError
 
-class GenericAuditDetailSpec extends UnitSpec {
+class GenericAuditDetailOldSpec extends UnitSpec {
 
   val nino: String                         = "XX751130C"
   val taxYear: String                      = "2021-22"
@@ -55,7 +55,7 @@ class GenericAuditDetailSpec extends UnitSpec {
     """.stripMargin
   )
 
-  val auditDetailModelSuccess: GenericAuditDetail = GenericAuditDetail(
+  val auditDetailModelSuccess: GenericAuditDetailOld = GenericAuditDetailOld(
     userType = userType,
     agentReferenceNumber = agentReferenceNumber,
     params = Map("nino" -> nino, "taxYear" -> taxYear),
@@ -109,7 +109,7 @@ class GenericAuditDetailSpec extends UnitSpec {
     """.stripMargin
   )
 
-  val invalidTaxYearAuditDetailModel: GenericAuditDetail = GenericAuditDetail(
+  val invalidTaxYearAuditDetailModel: GenericAuditDetailOld = GenericAuditDetailOld(
     userType = userType,
     agentReferenceNumber = agentReferenceNumber,
     params = Map("nino" -> nino, "taxYear" -> "2021-2022"),
