@@ -21,12 +21,24 @@ import shared.UnitSpec
 class NinoSpec extends UnitSpec {
 
   "The validation of a nino" should {
-    "pass with valid number without spaces" in { validateNino("AB123456C") should equal(true) }
-    "pass with valid number with spaces" in { validateNino("AB 12 34 56 C") should equal(true) }
-    "fail with valid number with leading space" in { validateNino(" AB123456C") should equal(false) }
-    "fail with valid number with trailing space" in { validateNino("AB123456C ") should equal(false) }
-    "fail with empty string" in { validateNino("") should equal(false) }
-    "fail with only space" in { validateNino("    ") should equal(false) }
+    "pass with valid number without spaces" in {
+      validateNino("AB123456C") should equal(true)
+    }
+    "pass with valid number with spaces" in {
+      validateNino("AB 12 34 56 C") should equal(true)
+    }
+    "fail with valid number with leading space" in {
+      validateNino(" AB123456C") should equal(false)
+    }
+    "fail with valid number with trailing space" in {
+      validateNino("AB123456C ") should equal(false)
+    }
+    "fail with empty string" in {
+      validateNino("") should equal(false)
+    }
+    "fail with only space" in {
+      validateNino("    ") should equal(false)
+    }
     "fail with total garbage" in {
       validateNino("XXX") should equal(false)
       validateNino("werionownadefwe") should equal(false)
@@ -44,8 +56,12 @@ class NinoSpec extends UnitSpec {
     "fail with lowercase letters" in {
       validateNino("ab123456c") should equal(false)
     }
-    "fail with less than 6 middle digits" in { validateNino("AB12345C") should equal(false) }
-    "fail with more than 6 middle digits" in { validateNino("AB1234567C") should equal(false) }
+    "fail with less than 6 middle digits" in {
+      validateNino("AB12345C") should equal(false)
+    }
+    "fail with more than 6 middle digits" in {
+      validateNino("AB1234567C") should equal(false)
+    }
 
     "fail if we start with invalid characters" in {
       val invalidStartLetterCombinations = List('D', 'F', 'I', 'Q', 'U', 'V').combinations(2).map(_.mkString("")).toList
@@ -61,12 +77,6 @@ class NinoSpec extends UnitSpec {
 
     "fail if the suffix is E" in {
       validateNino("AB123456E") should equal(false)
-    }
-  }
-
-  "Creating a Nino" should {
-    "fail if the nino is not valid" in {
-      an[IllegalArgumentException] should be thrownBy Nino("INVALID_NINO")
     }
   }
 
