@@ -1,6 +1,7 @@
 import sbt._
 import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings}
 import uk.gov.hmrc.SbtAutoBuildPlugin
+import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 val appName = "individuals-pensions-income-api"
 
@@ -13,7 +14,7 @@ lazy val microservice = Project(appName, file("."))
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test(),
     retrieveManaged                 := true,
     update / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(warnScalaVersionEviction = false),
-    scalaVersion                    := "2.13.8",
+    scalaVersion                    := "2.13.12",
     scalacOptions ++= List(
       "-language:higherKinds",
       "-Xlint:-byname-implicit",
@@ -44,7 +45,7 @@ lazy val microservice = Project(appName, file("."))
   )
   .settings(PlayKeys.playDefaultPort := 7762)
 
-dependencyUpdatesFilter -= moduleFilter(organization = "com.typesafe.play")
+dependencyUpdatesFilter -= moduleFilter(organization = "org.playframework")
 dependencyUpdatesFilter -= moduleFilter(name = "simple-reactivemongo")
 dependencyUpdatesFilter -= moduleFilter(name = "reactivemongo-test")
 dependencyUpdatesFilter -= moduleFilter(name = "scala-library")
