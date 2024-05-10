@@ -19,7 +19,7 @@ package api.controllers.requestParsers.validators
 import api.models.request.RawData
 import shared.models.errors.MtdError
 
-trait Validator[A <: RawData] {
+trait ValidatorOld[A <: RawData] {
 
   type ValidationLevel[T] = T => List[MtdError]
 

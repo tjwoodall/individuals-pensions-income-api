@@ -16,7 +16,7 @@
 
 package api.controllers.requestParsers
 
-import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.ValidatorOld
 import api.models.request.RawData
 import shared.models.errors
 import shared.models.errors.{BadRequestError, ErrorWrapper}
@@ -24,7 +24,7 @@ import shared.utils.Logging
 
 trait RequestParser[Raw <: RawData, Request] extends Logging {
 
-  val validator: Validator[Raw]
+  val validator: ValidatorOld[Raw]
 
   protected def requestFor(data: Raw): Request
 

@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators
 
-import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.ValidatorOld
 import api.controllers.requestParsers.validators.validations._
 import shared.config.AppConfig
 import shared.models.errors.MtdError
@@ -27,7 +27,7 @@ import javax.inject.{Inject, Singleton}
 
 @Singleton
 class CreateAmendPensionsValidator @Inject() (implicit appConfig: AppConfig)
-    extends Validator[CreateAmendPensionsRawData]
+    extends ValidatorOld[CreateAmendPensionsRawData]
     with ValueFormatErrorMessages {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation, bodyFormatValidator, bodyValueValidator)

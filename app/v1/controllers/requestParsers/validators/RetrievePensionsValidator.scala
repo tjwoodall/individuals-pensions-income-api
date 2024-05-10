@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators
 
-import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.ValidatorOld
 import api.controllers.requestParsers.validators.validations._
 import shared.config.AppConfig
 import shared.models.errors.MtdError
@@ -25,7 +25,7 @@ import v1.models.request.retrievePensions.RetrievePensionsRawData
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class RetrievePensionsValidator @Inject() (implicit appConfig: AppConfig) extends Validator[RetrievePensionsRawData] {
+class RetrievePensionsValidator @Inject() (implicit appConfig: AppConfig) extends ValidatorOld[RetrievePensionsRawData] {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation)
 

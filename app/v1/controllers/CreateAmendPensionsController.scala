@@ -16,11 +16,11 @@
 
 package v1.controllers
 
-import api.controllers.{AuthorisedController, RequestContext, RequestHandler}
+import api.controllers.{AuthorisedController, RequestContext, RequestHandlerOld}
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContentAsJson, ControllerComponents}
 import shared.config.AppConfig
-import shared.controllers.{AuditHandler, EndpointLogContext}
+import shared.controllers.{AuditHandlerOld, EndpointLogContext}
 import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import shared.utils.IdGenerator
 import v1.controllers.requestParsers.CreateAmendPensionsRequestParser
@@ -56,12 +56,12 @@ class CreateAmendPensionsController @Inject() (val authService: EnrolmentsAuthSe
         body = AnyContentAsJson(request.body)
       )
 
-      val requestHandler = RequestHandler
+      val requestHandler = RequestHandlerOld
         .withParser(parser)
         .withService(service.createAmendPensions)
         .withNoContentResult(OK)
         .withAuditing(
-          AuditHandler(
+          AuditHandlerOld(
             auditService,
             auditType = "CreateAmendPensionsIncome",
             transactionName = "create-amend-pensions-income",

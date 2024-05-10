@@ -17,7 +17,6 @@
 package shared.models.domain
 
 case class Nino(nino: String) {
-  require(Nino.isValid(nino), s"$nino is not a valid nino.")
   private val LengthWithoutSuffix = 8
 
   val value: String = nino

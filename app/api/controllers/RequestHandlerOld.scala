@@ -25,7 +25,7 @@ import play.api.libs.json.{JsValue, Writes}
 import play.api.mvc.Result
 import play.api.mvc.Results.InternalServerError
 import shared.config.AppConfig
-import shared.controllers.{AuditHandler, EndpointLogContext}
+import shared.controllers.{AuditHandlerOld, EndpointLogContext}
 import shared.models.errors.{ErrorWrapper, InternalError, RuleRequestCannotBeFulfilledError}
 import shared.models.outcomes.ResponseWrapper
 import shared.routing.Version
@@ -33,20 +33,20 @@ import shared.utils.Logging
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait RequestHandler[InputRaw <: RawData] {
+trait RequestHandlerOld[InputRaw <: RawData] {
 
   def handleRequest(
       rawData: InputRaw)(implicit ctx: RequestContext, request: UserRequest[_], ec: ExecutionContext, appConfig: AppConfig): Future[Result]
 
 }
 
-object RequestHandler {
+object RequestHandlerOld {
 
   def withParser[InputRaw <: RawData, Input](parser: RequestParser[InputRaw, Input]): ParserOnlyBuilder[InputRaw, Input] =
     new ParserOnlyBuilder[InputRaw, Input](parser)
 
   // Intermediate class so that the compiler can separately capture the InputRaw and Input types here, and the Output type later
-  class ParserOnlyBuilder[InputRaw <: RawData, Input] private[RequestHandler] (parser: RequestParser[InputRaw, Input]) {
+  class ParserOnlyBuilder[InputRaw <: RawData, Input] private[RequestHandlerOld](parser: RequestParser[InputRaw, Input]) {
 
     def withService[Output](
         serviceFunction: Input => Future[Either[ErrorWrapper, ResponseWrapper[Output]]]): RequestHandlerBuilder[InputRaw, Input, Output] =
@@ -54,13 +54,13 @@ object RequestHandler {
 
   }
 
-  case class RequestHandlerBuilder[InputRaw <: RawData, Input, Output] private[RequestHandler] (
+  case class RequestHandlerBuilder[InputRaw <: RawData, Input, Output] private[RequestHandlerOld](
       parser: RequestParser[InputRaw, Input],
       service: Input => Future[Either[ErrorWrapper, ResponseWrapper[Output]]],
       errorHandling: ErrorHandling = ErrorHandling.Default,
       resultCreator: ResultCreator[InputRaw, Input, Output] = ResultCreator.noContent[InputRaw, Input, Output](),
-      auditHandler: Option[AuditHandler] = None
-  ) extends RequestHandler[InputRaw] {
+      auditHandler: Option[AuditHandlerOld] = None
+  ) extends RequestHandlerOld[InputRaw] {
 
     def handleRequest(
         rawData: InputRaw)(implicit ctx: RequestContext, request: UserRequest[_], ec: ExecutionContext, appConfig: AppConfig): Future[Result] =
@@ -72,7 +72,7 @@ object RequestHandler {
     def withErrorHandling(errorHandling: ErrorHandling): RequestHandlerBuilder[InputRaw, Input, Output] =
       copy(errorHandling = errorHandling)
 
-    def withAuditing(auditHandler: AuditHandler): RequestHandlerBuilder[InputRaw, Input, Output] =
+    def withAuditing(auditHandler: AuditHandlerOld): RequestHandlerBuilder[InputRaw, Input, Output] =
       copy(auditHandler = Some(auditHandler))
 
     /** Shorthand for
@@ -92,7 +92,7 @@ object RequestHandler {
       withResultCreator(ResultCreator.noContent(successStatus))
 
     // Scoped as a private delegate so as to keep the logic completely separate from the configuration
-    private object Delegate extends RequestHandler[InputRaw] with Logging with RequestContextImplicits {
+    private object Delegate extends RequestHandlerOld[InputRaw] with Logging with RequestContextImplicits {
 
       implicit class Response(result: Result) {
 

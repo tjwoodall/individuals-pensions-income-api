@@ -16,17 +16,21 @@
 
 package shared.utils
 
-import org.scalamock.scalatest.MockFactory
+import shared.UnitSpec
 
-import java.time.{LocalDate, LocalDateTime}
+import java.time.LocalDateTime
 
-trait MockCurrentDateTime extends MockFactory {
+class DateUtilsSpec extends UnitSpec {
 
-  val mockCurrentDateTime: CurrentDateTime = mock[CurrentDateTime]
-
-  object MockCurrentDateTime {
-    def getDateTime: LocalDateTime = mockCurrentDateTime.getDateTime
-    def getLocalDate: LocalDate = mockCurrentDateTime.getLocalDate
+  "longDateTimestampGmt" should {
+    "return Date/time in format [EEE, dd MMM yyyy HH:mm:ss z]" when {
+      "given a LocalDateTime" in {
+        val result = DateUtils.longDateTimestampGmt(
+          LocalDateTime.of(2023, 1, 17, 12, 0)
+        )
+        result shouldBe "Tue, 17 Jan 2023 12:00:00 GMT"
+      }
+    }
   }
 
 }

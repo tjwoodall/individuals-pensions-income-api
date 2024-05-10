@@ -77,6 +77,7 @@ trait MockAppConfig extends MockFactory {
 
     def allowRequestCannotBeFulfilledHeader(version: Version): CallHandler[Boolean] =
       (mockAppConfig.allowRequestCannotBeFulfilledHeader: Version => Boolean).expects(version)
+
   }
 
 }

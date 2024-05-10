@@ -19,34 +19,34 @@ package api.models.audit
 import api.controllers.RequestContext
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, JsValue, OWrites}
-import shared.controllers.AuditHandler
+import shared.controllers.AuditHandlerOld
 import shared.models.auth.UserDetails
 
-case class GenericAuditDetail(userType: String,
-                              agentReferenceNumber: Option[String],
-                              params: Map[String, String],
-                              request: Option[JsValue],
-                              `X-CorrelationId`: String,
-                              response: AuditResponse)
+case class GenericAuditDetailOld(userType: String,
+                                 agentReferenceNumber: Option[String],
+                                 params: Map[String, String],
+                                 request: Option[JsValue],
+                                 `X-CorrelationId`: String,
+                                 response: AuditResponse)
 
-object GenericAuditDetail {
+object GenericAuditDetailOld {
 
-  implicit val writes: OWrites[GenericAuditDetail] = (
+  implicit val writes: OWrites[GenericAuditDetailOld] = (
     (JsPath \ "userType").write[String] and
       (JsPath \ "agentReferenceNumber").writeNullable[String] and
       JsPath.write[Map[String, String]] and
       (JsPath \ "request").writeNullable[JsValue] and
       (JsPath \ "X-CorrelationId").write[String] and
       (JsPath \ "response").write[AuditResponse]
-  )(unlift(GenericAuditDetail.unapply))
+  )(unlift(GenericAuditDetailOld.unapply))
 
   def apply(userDetails: UserDetails,
             params: Map[String, String],
             request: Option[JsValue],
             `X-CorrelationId`: String,
-            response: AuditResponse): GenericAuditDetail = {
+            response: AuditResponse): GenericAuditDetailOld = {
 
-    GenericAuditDetail(
+    GenericAuditDetailOld(
       userType = userDetails.userType,
       agentReferenceNumber = userDetails.agentReferenceNumber,
       params = params,
@@ -56,12 +56,12 @@ object GenericAuditDetail {
     )
   }
 
-  def auditDetailCreator(params: Map[String, String]): AuditHandler.AuditDetailCreator[GenericAuditDetail] =
-    new AuditHandler.AuditDetailCreator[GenericAuditDetail] {
+  def auditDetailCreator(params: Map[String, String]): AuditHandlerOld.AuditDetailCreator[GenericAuditDetailOld] =
+    new AuditHandlerOld.AuditDetailCreator[GenericAuditDetailOld] {
 
       def createAuditDetail(userDetails: UserDetails, request: Option[JsValue], response: AuditResponse)(implicit
-          ctx: RequestContext): GenericAuditDetail =
-        GenericAuditDetail(
+          ctx: RequestContext): GenericAuditDetailOld =
+        GenericAuditDetailOld(
           userDetails = userDetails,
           params = params,
           request = request,

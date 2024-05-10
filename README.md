@@ -9,7 +9,7 @@ The Individuals Pensions Income API allows a developer to create, amend, retriev
 
 - Scala 2.13.x
 - Java 11
-- sbt 1.7.x
+- sbt 1.9.7
 - [Service Manager](https://github.com/hmrc/sm2)
 
 ## Development Setup

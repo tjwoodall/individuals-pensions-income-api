@@ -1,4 +1,4 @@
-import sbt._
+import sbt.*
 import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings}
 import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
@@ -27,10 +27,10 @@ lazy val microservice = Project(appName, file("."))
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources"
   )
   .settings(majorVersion := 0)
-  .settings(CodeCoverageSettings.settings: _*)
-  .settings(defaultSettings(): _*)
+  .settings(CodeCoverageSettings.settings *)
+  .settings(defaultSettings() *)
   .configs(ItTest)
-  .settings(inConfig(ItTest)(Defaults.itSettings): _*)
+  .settings(inConfig(ItTest)(Defaults.itSettings) *)
   .settings(
     ItTest / fork                       := true,
     ItTest / unmanagedSourceDirectories := List((ItTest / baseDirectory).value / "it"),
