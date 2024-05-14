@@ -16,13 +16,13 @@
 
 package shared.connectors.httpparsers
 
-import shared.connectors.MtdIdLookupOutcome
-import shared.connectors.httpparsers.MtdIdLookupHttpParser.mtdIdLookupHttpReads
-import shared.models.errors._
 import play.api.libs.json.Json
 import play.api.libs.json.Writes.StringWrites
 import play.api.test.Helpers.{FORBIDDEN, INTERNAL_SERVER_ERROR, OK, UNAUTHORIZED}
 import shared.UnitSpec
+import shared.connectors.MtdIdLookupOutcome
+import shared.connectors.httpparsers.MtdIdLookupHttpParser.mtdIdLookupHttpReads
+import shared.models.errors._
 import uk.gov.hmrc.http.HttpResponse
 
 class MtdIdLookupHttpParserSpec extends UnitSpec {

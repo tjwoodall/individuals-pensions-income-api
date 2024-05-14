@@ -16,10 +16,10 @@
 
 package api.mocks.services
 
-import api.models.audit.AuditEvent
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.Writes
+import shared.models.audit.AuditEvent
 import shared.services.AuditService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult

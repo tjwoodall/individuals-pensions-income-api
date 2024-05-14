@@ -16,12 +16,12 @@
 
 package v1.services
 
-import api.controllers.RequestContext
 import cats.implicits._
+import shared.controllers.RequestContext
 import shared.models.errors._
 import shared.services.{BaseService, ServiceOutcome}
 import v1.connectors.DeletePensionsIncomeConnector
-import v1.models.request.deletePensions.DeletePensionsRequest
+import v1.models.request.deletePensions.DeletePensionsRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -29,7 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class DeletePensionsService @Inject() (connector: DeletePensionsIncomeConnector) extends BaseService {
 
-  def deletePensions(request: DeletePensionsRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
+  def deletePensions(request: DeletePensionsRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.deletePensionsIncome(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 

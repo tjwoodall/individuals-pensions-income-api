@@ -21,7 +21,7 @@ import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import shared.config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.models.request.retrievePensions.RetrievePensionsRequest
+import v1.models.request.retrievePensions.RetrievePensionsRequestData
 import v1.models.response.retrievePensions.RetrievePensionsResponse
 
 import javax.inject.{Inject, Singleton}
@@ -30,10 +30,10 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class RetrievePensionsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def retrieve(request: RetrievePensionsRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[RetrievePensionsResponse]] = {
+  def retrieve(request: RetrievePensionsRequestData)(implicit
+                                                     hc: HeaderCarrier,
+                                                     ec: ExecutionContext,
+                                                     correlationId: String): Future[DownstreamOutcome[RetrievePensionsResponse]] = {
 
     import request._
 
@@ -43,7 +43,7 @@ class RetrievePensionsConnector @Inject() (val http: HttpClient, val appConfig: 
       IfsUri[RetrievePensionsResponse](s"income-tax/income/pensions/${nino.value}/${taxYear.asMtd}")
     }
 
-    get(uri = downstreamUri)
+    get(downstreamUri)
   }
 
 }

@@ -16,10 +16,9 @@
 
 package shared.services
 
-import api.controllers.RequestContext
 import play.api.http.{HeaderNames, MimeTypes, Status}
 import shared.UnitSpec
-import shared.controllers.EndpointLogContext
+import shared.controllers.{EndpointLogContext, RequestContext}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext

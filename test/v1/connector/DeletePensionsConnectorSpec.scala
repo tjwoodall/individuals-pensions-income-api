@@ -21,7 +21,7 @@ import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors.{NinoFormatError,InternalError}
 import shared.models.outcomes.ResponseWrapper
 import v1.connectors.DeletePensionsIncomeConnector
-import v1.models.request.deletePensions.DeletePensionsRequest
+import v1.models.request.deletePensions.DeletePensionsRequestData
 
 import scala.concurrent.Future
 
@@ -34,8 +34,8 @@ class DeletePensionsConnectorSpec extends ConnectorSpec {
 
     val nino: String = "AA111111A"
 
-    protected val request: DeletePensionsRequest =
-      DeletePensionsRequest(
+    protected val request: DeletePensionsRequestData =
+      DeletePensionsRequestData(
         nino = Nino(nino),
         taxYear = taxYear
       )

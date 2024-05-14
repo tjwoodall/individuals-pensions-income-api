@@ -16,11 +16,11 @@
 
 package v1.mocks.services
 
-import api.controllers.RequestContext
 import shared.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.models.request.retrievePensions.RetrievePensionsRequest
+import shared.controllers.RequestContext
+import v1.models.request.retrievePensions.RetrievePensionsRequestData
 import v1.models.response.retrievePensions.RetrievePensionsResponse
 import v1.services.RetrievePensionsService
 
@@ -32,10 +32,10 @@ trait MockRetrievePensionsService extends MockFactory {
 
   object MockRetrievePensionsService {
 
-    def retrievePensions(requestData: RetrievePensionsRequest): CallHandler[Future[ServiceOutcome[RetrievePensionsResponse]]] = {
+    def retrievePensions(requestData: RetrievePensionsRequestData): CallHandler[Future[ServiceOutcome[RetrievePensionsResponse]]] = {
       (
         mockRetrievePensionsService
-          .retrievePensions(_: RetrievePensionsRequest)(
+          .retrievePensions(_: RetrievePensionsRequestData)(
             _: RequestContext,
             _: ExecutionContext
           )

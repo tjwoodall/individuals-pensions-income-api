@@ -20,7 +20,7 @@ import api.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear, Timestamp}
 import shared.models.outcomes.ResponseWrapper
 import v1.connectors.RetrievePensionsConnector
-import v1.models.request.retrievePensions.RetrievePensionsRequest
+import v1.models.request.retrievePensions.RetrievePensionsRequestData
 import v1.models.response.retrievePensions.RetrievePensionsResponse
 
 import scala.concurrent.Future
@@ -45,7 +45,7 @@ class RetrievePensionsConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    lazy val request: RetrievePensionsRequest = RetrievePensionsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+    lazy val request: RetrievePensionsRequestData = RetrievePensionsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
   }
 
   "RetrievePensionsConnector" when {

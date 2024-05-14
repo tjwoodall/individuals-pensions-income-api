@@ -16,15 +16,14 @@
 
 package v1.controllers
 
-import api.controllers.{AuthorisedController, RequestContext, RequestHandlerOld}
 import play.api.libs.json.JsValue
-import play.api.mvc.{Action, AnyContentAsJson, ControllerComponents}
+import play.api.mvc.{Action, ControllerComponents}
 import shared.config.AppConfig
-import shared.controllers.{AuditHandlerOld, EndpointLogContext}
+import shared.controllers._
+import shared.routing.Version1
 import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import shared.utils.IdGenerator
-import v1.controllers.requestParsers.CreateAmendPensionsRequestParser
-import v1.models.request.createAmendPensions.CreateAmendPensionsRawData
+import v1.controllers.validators.CreateAmendPensionsValidatorFactory
 import v1.services.CreateAmendPensionsService
 
 import javax.inject.{Inject, Singleton}
@@ -33,7 +32,7 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class CreateAmendPensionsController @Inject() (val authService: EnrolmentsAuthService,
                                                val lookupService: MtdIdLookupService,
-                                               parser: CreateAmendPensionsRequestParser,
+                                               validatorFactory: CreateAmendPensionsValidatorFactory,
                                                service: CreateAmendPensionsService,
                                                auditService: AuditService,
                                                cc: ControllerComponents,
@@ -50,27 +49,24 @@ class CreateAmendPensionsController @Inject() (val authService: EnrolmentsAuthSe
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData: CreateAmendPensionsRawData = CreateAmendPensionsRawData(
-        nino = nino,
-        taxYear = taxYear,
-        body = AnyContentAsJson(request.body)
-      )
+      val validator = validatorFactory.validator(nino, taxYear, request.body)
 
-      val requestHandler = RequestHandlerOld
-        .withParser(parser)
+      val requestHandler = RequestHandler
+        .withValidator(validator)
         .withService(service.createAmendPensions)
         .withNoContentResult(OK)
         .withAuditing(
-          AuditHandlerOld(
+          AuditHandler(
             auditService,
             auditType = "CreateAmendPensionsIncome",
             transactionName = "create-amend-pensions-income",
+            apiVersion = Version1,
             params = Map("nino" -> nino, "taxYear" -> taxYear),
             requestBody = Some(request.body)
           )
         )
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }

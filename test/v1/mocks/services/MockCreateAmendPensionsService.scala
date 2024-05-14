@@ -16,11 +16,11 @@
 
 package v1.mocks.services
 
-import api.controllers.RequestContext
 import shared.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.models.request.createAmendPensions.CreateAmendPensionsRequest
+import shared.controllers.RequestContext
+import v1.models.request.createAmendPensions.CreateAmendPensionsRequestData
 import v1.services.CreateAmendPensionsService
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -31,9 +31,9 @@ trait MockCreateAmendPensionsService extends MockFactory {
 
   object MockCreateAmendPensionsService {
 
-    def createAmendPensions(requestData: CreateAmendPensionsRequest): CallHandler[Future[ServiceOutcome[Unit]]] = {
+    def createAmendPensions(requestData: CreateAmendPensionsRequestData): CallHandler[Future[ServiceOutcome[Unit]]] = {
       (mockCreateAmendPensionsService
-        .createAmendPensions(_: CreateAmendPensionsRequest)(_: RequestContext, _: ExecutionContext))
+        .createAmendPensions(_: CreateAmendPensionsRequestData)(_: RequestContext, _: ExecutionContext))
         .expects(requestData, *, *)
     }
 

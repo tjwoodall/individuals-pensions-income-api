@@ -78,7 +78,7 @@ class CreateAmendPensionsConnectorSpec extends ConnectorSpec {
     overseasPensionContributions = Some(overseasPensionContributionsModel)
   )
 
-  private def amendPensionsRequest(taxYear: String): CreateAmendPensionsRequest = CreateAmendPensionsRequest(
+  private def amendPensionsRequest(taxYear: String): CreateAmendPensionsRequestData = CreateAmendPensionsRequestData(
     nino = Nino(nino),
     taxYear = TaxYear.fromMtd(taxYear),
     body = amendPensionsRequestBody
@@ -91,10 +91,10 @@ class CreateAmendPensionsConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    MockedAppConfig.ifsBaseUrl returns baseUrl
-    MockedAppConfig.ifsToken returns "ifs-token"
-    MockedAppConfig.ifsEnvironment returns "ifs-environment"
-    MockedAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
+    MockAppConfig.ifsBaseUrl returns baseUrl
+    MockAppConfig.ifsToken returns "ifs-token"
+    MockAppConfig.ifsEnvironment returns "ifs-environment"
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "AmendPensionsConnector" when {

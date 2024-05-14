@@ -16,12 +16,12 @@
 
 package v1.services
 
-import api.controllers.RequestContext
 import cats.implicits._
+import shared.controllers.RequestContext
 import shared.models.errors._
 import shared.services.{BaseService, ServiceOutcome}
 import v1.connectors.RetrievePensionsConnector
-import v1.models.request.retrievePensions.RetrievePensionsRequest
+import v1.models.request.retrievePensions.RetrievePensionsRequestData
 import v1.models.response.retrievePensions.RetrievePensionsResponse
 
 import javax.inject.{Inject, Singleton}
@@ -31,7 +31,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class RetrievePensionsService @Inject() (connector: RetrievePensionsConnector) extends BaseService {
 
   def retrievePensions(
-      request: RetrievePensionsRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[RetrievePensionsResponse]] = {
+      request: RetrievePensionsRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[RetrievePensionsResponse]] = {
 
     connector.retrieve(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

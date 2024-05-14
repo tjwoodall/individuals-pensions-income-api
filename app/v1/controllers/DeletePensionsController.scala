@@ -16,14 +16,13 @@
 
 package v1.controllers
 
-import api.controllers._
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import shared.config.AppConfig
-import shared.controllers.{AuditHandlerOld, EndpointLogContext}
+import shared.controllers._
+import shared.routing.Version1
 import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import shared.utils.IdGenerator
-import v1.controllers.requestParsers.DeletePensionsRequestParser
-import v1.models.request.deletePensions.DeletePensionsRawData
+import v1.controllers.validators.DeletePensionsValidatorFactory
 import v1.services.DeletePensionsService
 
 import javax.inject.{Inject, Singleton}
@@ -32,7 +31,7 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class DeletePensionsController @Inject() (val authService: EnrolmentsAuthService,
                                           val lookupService: MtdIdLookupService,
-                                          parser: DeletePensionsRequestParser,
+                                          validatorFactory: DeletePensionsValidatorFactory,
                                           service: DeletePensionsService,
                                           auditService: AuditService,
                                           cc: ControllerComponents,
@@ -44,28 +43,25 @@ class DeletePensionsController @Inject() (val authService: EnrolmentsAuthService
       controllerName = "DeletePensionsController",
       endpointName = "deletePensions"
     )
-
   def deletePensions(nino: String, taxYear: String): Action[AnyContent] =
-    authorisedAction(nino).async { implicit request =>
-      implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
+  authorisedAction(nino).async { implicit request =>
+    implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData: DeletePensionsRawData = DeletePensionsRawData(
-        nino = nino,
-        taxYear = taxYear
-      )
+    val validator = validatorFactory.validator(nino, taxYear)
 
-      val requestHandler = RequestHandlerOld
-        .withParser(parser)
+      val requestHandler = RequestHandler
+        .withValidator(validator)
         .withService(service.deletePensions)
         .withNoContentResult()
         .withAuditing(
-          AuditHandlerOld(
+          AuditHandler(
             auditService,
             auditType = "DeletePensionsIncome",
+            apiVersion = Version1,
             transactionName = "delete-pensions-income",
             params = Map("nino" -> nino, "taxYear" -> taxYear)
           ))
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }
