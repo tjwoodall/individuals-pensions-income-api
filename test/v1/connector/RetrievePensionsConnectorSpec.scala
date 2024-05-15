@@ -16,7 +16,7 @@
 
 package v1.connector
 
-import api.connectors.ConnectorSpec
+import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear, Timestamp}
 import shared.models.outcomes.ResponseWrapper
 import v1.connectors.RetrievePensionsConnector

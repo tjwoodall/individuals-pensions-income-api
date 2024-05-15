@@ -29,7 +29,7 @@ import scala.util.Try
 
 class DocumentationControllerISpec extends IntegrationBaseSpec {
 
-  private val apiTitle = "Individuals Pensions Income (MTD) [Test only]"
+  private val apiTitle = "Individuals Pensions Income (MTD)"
 
   private val config          = app.injector.instanceOf[AppConfig]
   private val confidenceLevel = config.confidenceLevelConfig.confidenceLevel

@@ -38,7 +38,7 @@ import javax.inject.{Inject, Singleton}
             s"Invalid endpoint details format: '$endpointDetails'. The endpoint details should consist of two space-separated parts: version and name.")
       }
 
-      if (appConfig.endpointReleasedInProduction(version, name)) "" else " [test only]"
+      if (appConfig.endpointReleasedInProduction(version, name)) "" else " [Test only]"
     }
   )
 

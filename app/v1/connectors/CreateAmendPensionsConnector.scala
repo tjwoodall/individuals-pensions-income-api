@@ -16,9 +16,11 @@
 
 package v1.connectors
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
-import api.connectors._
 import shared.config.AppConfig
+import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import uk.gov.hmrc.http.HttpReadsInstances.readFromJson
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.models.request.createAmendPensions.CreateAmendPensionsRequestData
 
@@ -33,7 +35,6 @@ class CreateAmendPensionsConnector @Inject() (val http: HttpClient, val appConfi
                                                                    ec: ExecutionContext,
                                                                    correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    import api.connectors.httpparsers.StandardDownstreamHttpParser._
     import request._
 
     val downstreamUrl = if (taxYear.useTaxYearSpecificApi) {
@@ -42,7 +43,7 @@ class CreateAmendPensionsConnector @Inject() (val http: HttpClient, val appConfi
       IfsUri[Unit](s"income-tax/income/pensions/$nino/${taxYear.asMtd}")
     }
 
-    put(downstreamUrl, request.body)
+    put(request.body, downstreamUrl)
   }
 
 }

@@ -49,7 +49,7 @@ import javax.inject.{Inject, Singleton}
               val whitespace = components(0)
               val summary    = components(1).replace("\"", "")
 
-              val replacement = s"""${whitespace}summary: "$summary [test only]""""
+              val replacement = s"""${whitespace}summary: "$summary [Test only]""""
 
               yaml.replaceFirst(line, replacement)
           }

@@ -16,10 +16,10 @@
 
 package v1.connectors
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
-import api.connectors.httpparsers.StandardDownstreamHttpParser._
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import shared.config.AppConfig
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.models.request.deletePensions.DeletePensionsRequestData
 

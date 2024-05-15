@@ -16,8 +16,8 @@
 
 package v1.connector
 
-import api.connectors.ConnectorSpec
 import shared.config.MockAppConfig
+import shared.connectors.ConnectorSpec
 import shared.mocks.MockHttpClient
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper

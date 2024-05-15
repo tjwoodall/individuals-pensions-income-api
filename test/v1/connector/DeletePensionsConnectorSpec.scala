@@ -16,9 +16,9 @@
 
 package v1.connector
 
-import api.connectors.ConnectorSpec
+import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.{NinoFormatError,InternalError}
+import shared.models.errors.{InternalError, NinoFormatError}
 import shared.models.outcomes.ResponseWrapper
 import v1.connectors.DeletePensionsIncomeConnector
 import v1.models.request.deletePensions.DeletePensionsRequestData

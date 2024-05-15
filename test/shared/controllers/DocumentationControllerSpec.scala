@@ -45,27 +45,27 @@ class DocumentationControllerSpec extends ControllerBaseSpec with MockAppConfig 
   }
 
   "rewrite()" when {
-//    "the API version is disabled" should {
-//      "return the yaml with [test only] in the API title" in new Test {
-//        MockAppConfig.apiVersionReleasedInProduction("1.0").anyNumberOfTimes() returns false
-//        MockAppConfig.endpointsEnabled("1.0").anyNumberOfTimes() returns true
-//
-//        val response: Future[Result] = requestAsset("application.yaml")
-//        status(response) shouldBe OK
-//
-//        private val result = contentAsString(response)
-//        result should include(s"""  title: "$apiTitle [test only]"""")
-//
-//        withClue("Only the title should have [test only] appended:") {
-//          numberOfTestOnlyOccurrences(result) shouldBe 1
-//        }
-//
-//        result should startWith("""openapi: "3.0.3"
-//                                  |
-//                                  |info:
-//                                  |  version: "1.0"""".stripMargin)
-//      }
-//    }
+    "the API version is disabled" should {
+      "return the yaml with [test only] in the API title" in new Test {
+        MockAppConfig.apiVersionReleasedInProduction("1.0").anyNumberOfTimes() returns false
+        MockAppConfig.endpointsEnabled("1.0").anyNumberOfTimes() returns true
+
+        val response: Future[Result] = requestAsset("application.yaml")
+        status(response) shouldBe OK
+
+        private val result = contentAsString(response)
+        result should include(s"""  title: "$apiTitle [Test only]"""")
+
+        withClue("Only the title should have [Test only] appended:") {
+          numberOfTestOnlyOccurrences(result) shouldBe 1
+        }
+
+        result should startWith("""openapi: "3.0.3"
+                                  |
+                                  |info:
+                                  |  version: "1.0"""".stripMargin)
+      }
+    }
     "the API version is enabled" should {
       "return the yaml with the API title unchanged" in new Test {
         MockAppConfig.apiVersionReleasedInProduction("1.0").anyNumberOfTimes() returns true
@@ -95,7 +95,7 @@ class DocumentationControllerSpec extends ControllerBaseSpec with MockAppConfig 
     protected def requestAsset(filename: String, accept: String = "text/yaml"): Future[Result] =
       controller.asset("1.0", filename)(fakeGetRequest.withHeaders(ACCEPT -> accept))
 
-    protected def numberOfTestOnlyOccurrences(str: String): Int = "\\[test only]".r.findAllIn(str).size
+    protected def numberOfTestOnlyOccurrences(str: String): Int = "\\[Test only]".r.findAllIn(str).size
 
     MockAppConfig.featureSwitchConfig returns Configuration("openApiFeatureTest.enabled" -> featureEnabled)
 

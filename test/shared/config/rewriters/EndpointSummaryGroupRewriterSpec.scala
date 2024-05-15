@@ -82,7 +82,7 @@ class EndpointSummaryGroupRewriterSpec extends UnitSpec with MockAppConfig {
           """
                   |put:
                   |  $ref: "./employment_expenses_create_and_amend.yaml"
-                  |  summary: Create and Amend Employment Expenses [test only]
+                  |  summary: Create and Amend Employment Expenses [Test only]
                   |  security:
                   |    - User-Restricted:
                   |        - write:self-assessment
@@ -99,7 +99,7 @@ class EndpointSummaryGroupRewriterSpec extends UnitSpec with MockAppConfig {
                   |
                   |delete:
                   |  $ref: "./employment_expenses_delete.yaml"
-                  |  summary: Delete Employment Expenses [test only]
+                  |  summary: Delete Employment Expenses [Test only]
                   |  security:
                   |    - User-Restricted:
                   |        - write:self-assessment
