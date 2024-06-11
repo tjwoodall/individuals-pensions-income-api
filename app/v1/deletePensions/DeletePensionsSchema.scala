@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package shared.connectors
+package v1.deletePensions
 
-sealed trait DownstreamUri[+Resp] {
-  val value: String
-}
+sealed trait DeletePensionsSchema
 
-object DownstreamUri {
-  final case class DesUri[Resp](value: String)                extends DownstreamUri[Resp]
-  final case class IfsUri[Resp](value: String)                extends DownstreamUri[Resp]
-  final case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
+object DeletePensionsSchema {
+
+  case object Def1 extends DeletePensionsSchema
+
 }

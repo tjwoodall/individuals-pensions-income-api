@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package shared.connectors
+package v1.deletePensions.model.request
 
-sealed trait DownstreamUri[+Resp] {
-  val value: String
+import shared.models.domain.{Nino, TaxYear}
+import v1.deletePensions.DeletePensionsSchema
+
+sealed trait DeletePensionsRequestData {
+  def nino: Nino
+  def taxYear: TaxYear
+
+  val schema: DeletePensionsSchema
 }
 
-object DownstreamUri {
-  final case class DesUri[Resp](value: String)                extends DownstreamUri[Resp]
-  final case class IfsUri[Resp](value: String)                extends DownstreamUri[Resp]
-  final case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
+case class Def1_DeletePensionsRequestData(nino: Nino, taxYear: TaxYear) extends DeletePensionsRequestData {
+  override val schema: DeletePensionsSchema = DeletePensionsSchema.Def1
 }

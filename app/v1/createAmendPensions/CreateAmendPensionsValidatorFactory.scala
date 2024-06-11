@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package shared.connectors
+package v1.createAmendPensions
 
-sealed trait DownstreamUri[+Resp] {
-  val value: String
-}
+import play.api.libs.json.JsValue
+import shared.config.AppConfig
+import shared.controllers.validators.Validator
+import v1.createAmendPensions.def1.Def1_CreateAmendPensionsValidator
+import v1.createAmendPensions.model.request.CreateAmendPensionsRequestData
 
-object DownstreamUri {
-  final case class DesUri[Resp](value: String)                extends DownstreamUri[Resp]
-  final case class IfsUri[Resp](value: String)                extends DownstreamUri[Resp]
-  final case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
+import javax.inject.Inject
+
+class CreateAmendPensionsValidatorFactory @Inject() (appConfig: AppConfig) {
+
+  def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendPensionsRequestData] =
+    new Def1_CreateAmendPensionsValidator(nino, taxYear, body)(appConfig)
+
 }

@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package shared.connectors
+package v1.retrievePensions.model.request
 
-sealed trait DownstreamUri[+Resp] {
-  val value: String
+import shared.models.domain.{Nino, TaxYear}
+import v1.retrievePensions.RetrievePensionsSchema
+
+sealed trait RetrievePensionsRequestData {
+  def nino: Nino
+  def taxYear: TaxYear
+
+  val schema: RetrievePensionsSchema
 }
 
-object DownstreamUri {
-  final case class DesUri[Resp](value: String)                extends DownstreamUri[Resp]
-  final case class IfsUri[Resp](value: String)                extends DownstreamUri[Resp]
-  final case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
+case class Def1_RetrievePensionsRequestData(nino: Nino, taxYear: TaxYear) extends RetrievePensionsRequestData {
+  val schema: RetrievePensionsSchema = RetrievePensionsSchema.Def1
 }

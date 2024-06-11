@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
-package shared.connectors
+package v1.createAmendPensions.model.request
 
-sealed trait DownstreamUri[+Resp] {
-  val value: String
+import shared.models.domain.{Nino, TaxYear}
+import v1.createAmendPensions.CreateAmendPensionsSchema
+
+sealed trait CreateAmendPensionsRequestData {
+  def nino: Nino
+  def taxYear: TaxYear
+  def body: CreateAmendPensionsRequestBody
+
+  val schema: CreateAmendPensionsSchema
 }
 
-object DownstreamUri {
-  final case class DesUri[Resp](value: String)                extends DownstreamUri[Resp]
-  final case class IfsUri[Resp](value: String)                extends DownstreamUri[Resp]
-  final case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
+case class Def1_CreateAmendPensionsRequestData(nino: Nino, taxYear: TaxYear, body: Def1_CreateAmendPensionsRequestBody)
+    extends CreateAmendPensionsRequestData {
+
+  override val schema: CreateAmendPensionsSchema = CreateAmendPensionsSchema.Def1
 }

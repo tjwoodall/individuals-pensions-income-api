@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package shared.connectors
+package v1.retrievePensions
 
-sealed trait DownstreamUri[+Resp] {
-  val value: String
-}
+import shared.config.AppConfig
+import shared.controllers.validators.Validator
+import v1.retrievePensions.def1.Def1_RetrievePensionsValidator
+import v1.retrievePensions.model.request.RetrievePensionsRequestData
 
-object DownstreamUri {
-  final case class DesUri[Resp](value: String)                extends DownstreamUri[Resp]
-  final case class IfsUri[Resp](value: String)                extends DownstreamUri[Resp]
-  final case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
+import javax.inject.Inject
+
+class RetrievePensionsValidatorFactory @Inject() (appConfig: AppConfig) {
+
+  def validator(nino: String, taxYear: String): Validator[RetrievePensionsRequestData] =
+    new Def1_RetrievePensionsValidator(nino, taxYear)(appConfig)
+
 }

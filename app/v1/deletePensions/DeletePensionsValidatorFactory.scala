@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package shared.connectors
+package v1.deletePensions
 
-sealed trait DownstreamUri[+Resp] {
-  val value: String
-}
+import shared.config.AppConfig
+import shared.controllers.validators.Validator
+import v1.deletePensions.def1.Def1_DeletePensionsValidator
+import v1.deletePensions.model.request.DeletePensionsRequestData
 
-object DownstreamUri {
-  final case class DesUri[Resp](value: String)                extends DownstreamUri[Resp]
-  final case class IfsUri[Resp](value: String)                extends DownstreamUri[Resp]
-  final case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
+import javax.inject.Inject
+
+class DeletePensionsValidatorFactory @Inject() (appConfig: AppConfig) {
+
+  def validator(nino: String, taxYear: String): Validator[DeletePensionsRequestData] =
+    new Def1_DeletePensionsValidator(nino, taxYear)(appConfig)
+
 }

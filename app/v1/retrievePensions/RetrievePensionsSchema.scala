@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package shared.connectors
+package v1.retrievePensions
 
-sealed trait DownstreamUri[+Resp] {
-  val value: String
-}
+import play.api.libs.json.Reads
+import shared.schema.DownstreamReadable
+import v1.retrievePensions.model.response.{Def1_RetrievePensionsResponse, RetrievePensionsResponse}
 
-object DownstreamUri {
-  final case class DesUri[Resp](value: String)                extends DownstreamUri[Resp]
-  final case class IfsUri[Resp](value: String)                extends DownstreamUri[Resp]
-  final case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
+sealed trait RetrievePensionsSchema extends DownstreamReadable[RetrievePensionsResponse]
+
+object RetrievePensionsSchema {
+
+  case object Def1 extends RetrievePensionsSchema {
+    type DownstreamResp = Def1_RetrievePensionsResponse
+    val connectorReads: Reads[DownstreamResp] = Def1_RetrievePensionsResponse.reads
+  }
+
 }
