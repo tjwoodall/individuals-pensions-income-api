@@ -16,7 +16,7 @@
 
 package v1.deletePensions
 
-import shared.UnitSpec
+import shared.utils.UnitSpec
 import shared.config.MockAppConfig
 import v1.deletePensions.def1.Def1_DeletePensionsValidator
 
@@ -27,7 +27,7 @@ class DeletePensionsValidatorFactorySpec extends UnitSpec with MockAppConfig {
   private val invalidNino    = "not-a-nino"
   private val invalidTaxYear = "not-a-tax-year"
 
-  val validatorFactory = new DeletePensionsValidatorFactory(mockAppConfig)
+  val validatorFactory = new DeletePensionsValidatorFactory
 
   "validator" should {
     "return the Def1 validator" when {

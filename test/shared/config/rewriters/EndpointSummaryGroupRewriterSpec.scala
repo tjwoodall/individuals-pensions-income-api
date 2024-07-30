@@ -17,8 +17,8 @@
 package shared.config.rewriters
 
 import com.github.jknack.handlebars.HandlebarsException
-import shared.UnitSpec
 import shared.config.MockAppConfig
+import shared.utils.UnitSpec
 
 class EndpointSummaryGroupRewriterSpec extends UnitSpec with MockAppConfig {
 
@@ -82,7 +82,7 @@ class EndpointSummaryGroupRewriterSpec extends UnitSpec with MockAppConfig {
           """
                   |put:
                   |  $ref: "./employment_expenses_create_and_amend.yaml"
-                  |  summary: Create and Amend Employment Expenses [Test only]
+                  |  summary: Create and Amend Employment Expenses [test only]
                   |  security:
                   |    - User-Restricted:
                   |        - write:self-assessment
@@ -99,7 +99,7 @@ class EndpointSummaryGroupRewriterSpec extends UnitSpec with MockAppConfig {
                   |
                   |delete:
                   |  $ref: "./employment_expenses_delete.yaml"
-                  |  summary: Delete Employment Expenses [Test only]
+                  |  summary: Delete Employment Expenses [test only]
                   |  security:
                   |    - User-Restricted:
                   |        - write:self-assessment

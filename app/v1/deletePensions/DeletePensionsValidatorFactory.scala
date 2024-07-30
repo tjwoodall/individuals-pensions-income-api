@@ -16,16 +16,13 @@
 
 package v1.deletePensions
 
-import shared.config.AppConfig
 import shared.controllers.validators.Validator
 import v1.deletePensions.def1.Def1_DeletePensionsValidator
 import v1.deletePensions.model.request.DeletePensionsRequestData
 
-import javax.inject.Inject
-
-class DeletePensionsValidatorFactory @Inject() (appConfig: AppConfig) {
+class DeletePensionsValidatorFactory {
 
   def validator(nino: String, taxYear: String): Validator[DeletePensionsRequestData] =
-    new Def1_DeletePensionsValidator(nino, taxYear)(appConfig)
+    new Def1_DeletePensionsValidator(nino, taxYear)
 
 }

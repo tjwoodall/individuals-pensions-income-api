@@ -16,7 +16,7 @@
 
 package v1.retrievePensions.def1
 
-import shared.UnitSpec
+import shared.utils.UnitSpec
 import shared.config.{AppConfig, MockAppConfig}
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors._
@@ -35,18 +35,12 @@ class Def1_RetrievePensionsValidatorSpec extends UnitSpec with MockAppConfig {
   implicit val appConfig: AppConfig = mockAppConfig
 
   private def validator(nino: String, taxYear: String) =
-    new Def1_RetrievePensionsValidator(nino, taxYear)(mockAppConfig)
-
-  def setupStubs() = {
-    MockAppConfig.minimumPermittedTaxYear
-      .returns(2021)
-      .anyNumberOfTimes()
-  }
+    new Def1_RetrievePensionsValidator(nino, taxYear)
 
   "running a validation" should {
     "return no errors" when {
       "a valid request is supplied" in {
-        setupStubs()
+
         val result = validator(validNino, validTaxYear).validateAndWrapResult()
         result shouldBe Right(Def1_RetrievePensionsRequestData(parsedNino, parsedTaxYear))
       }
@@ -54,7 +48,7 @@ class Def1_RetrievePensionsValidatorSpec extends UnitSpec with MockAppConfig {
 
     "return NinoFormatError error" when {
       "an invalid nino is supplied" in {
-        setupStubs()
+
         val result = validator("A12344A", validTaxYear).validateAndWrapResult()
         result shouldBe Left(
           ErrorWrapper(correlationId, NinoFormatError)
@@ -64,7 +58,7 @@ class Def1_RetrievePensionsValidatorSpec extends UnitSpec with MockAppConfig {
 
     "return TaxYearFormatError error" when {
       "an invalid tax year is supplied" in {
-        setupStubs()
+
         val result = validator(validNino, "201718").validateAndWrapResult()
         result shouldBe Left(
           ErrorWrapper(correlationId, TaxYearFormatError)
@@ -74,7 +68,7 @@ class Def1_RetrievePensionsValidatorSpec extends UnitSpec with MockAppConfig {
 
     "return RuleTaxYearNotSupportedError error" when {
       "an invalid tax year is supplied" in {
-        setupStubs()
+
         val result = validator(validNino, "2016-17").validateAndWrapResult()
         result shouldBe Left(
           ErrorWrapper(correlationId, RuleTaxYearNotSupportedError)
@@ -84,7 +78,7 @@ class Def1_RetrievePensionsValidatorSpec extends UnitSpec with MockAppConfig {
 
     "return RuleTaxYearRangeInvalidError error" when {
       "an invalid tax year range is supplied" in {
-        setupStubs()
+
         val result = validator(validNino, "2017-19").validateAndWrapResult()
         result shouldBe Left(
           ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError)
@@ -94,7 +88,7 @@ class Def1_RetrievePensionsValidatorSpec extends UnitSpec with MockAppConfig {
 
     "return multiple errors" when {
       "request supplied has multiple errors" in {
-        setupStubs()
+
         val result = validator("not-a-nino", "2017-19").validateAndWrapResult()
 
         result shouldBe Left(

@@ -17,16 +17,13 @@
 package v1.createAmendPensions
 
 import play.api.libs.json.JsValue
-import shared.config.AppConfig
 import shared.controllers.validators.Validator
 import v1.createAmendPensions.def1.Def1_CreateAmendPensionsValidator
 import v1.createAmendPensions.model.request.CreateAmendPensionsRequestData
 
-import javax.inject.Inject
-
-class CreateAmendPensionsValidatorFactory @Inject() (appConfig: AppConfig) {
+class CreateAmendPensionsValidatorFactory {
 
   def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendPensionsRequestData] =
-    new Def1_CreateAmendPensionsValidator(nino, taxYear, body)(appConfig)
+    new Def1_CreateAmendPensionsValidator(nino, taxYear, body)
 
 }

@@ -14,24 +14,12 @@
  * limitations under the License.
  */
 
-package shared.utils
+package shared.hateoas
 
-import play.api.libs.json.Reads
+import shared.hateoas.Method.{DELETE, GET, POST, PUT}
+import shared.utils.UnitSpec
+import shared.utils.enums.EnumJsonSpecSupport
 
-trait JsonUtils {
-
-  /** Extension methods for reads of a optional sequence
-    */
-  implicit class OptSeqReadsOps[A](reads: Reads[Option[Seq[A]]]) {
-
-    /** Returns a Reads that maps the sequence to itself unless it is empty
-      */
-    def mapEmptySeqToNone: Reads[Option[Seq[A]]] =
-      reads.map {
-        case Some(Nil) => None
-        case other     => other
-      }
-
-  }
-
+class MethodSpec extends UnitSpec with EnumJsonSpecSupport {
+  testRoundTrip[Method](("GET", GET), ("POST", POST), ("DELETE", DELETE), ("PUT", PUT))
 }

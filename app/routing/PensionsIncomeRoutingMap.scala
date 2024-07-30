@@ -14,27 +14,24 @@
  * limitations under the License.
  */
 
-package shared.utils
+package routing
 
-import play.api.libs.json._
-import shared.UnitSpec
+import play.api.routing.Router
+import shared.config.AppConfig
+import shared.routing.{Version, Version1, VersionRoutingMap}
 
-class JsonUtilsSpec extends UnitSpec with JsonUtils {
+import javax.inject.{Inject, Singleton}
 
-  "mapEmptySeqToNone" must {
-    val reads = __.readNullable[Seq[String]].mapEmptySeqToNone
+@Singleton case class PensionsIncomeRoutingMap @Inject()(
+    appConfig: AppConfig,
+    defaultRouter: Router,
+    v1Router: v1.Routes
+) extends VersionRoutingMap {
 
-    "map non-empty sequence to Some(non-empty sequence)" in {
-      JsArray(Seq(JsString("value0"), JsString("value1"))).as(reads) shouldBe Some(Seq("value0", "value1"))
-    }
-
-    "map empty sequence to None" in {
-      JsArray.empty.as(reads) shouldBe None
-    }
-
-    "map None to None" in {
-      JsNull.as(reads) shouldBe None
-    }
-  }
+  /** Routes corresponding to available versions.
+    */
+  val map: Map[Version, Router] = Map(
+    Version1 -> v1Router
+  )
 
 }

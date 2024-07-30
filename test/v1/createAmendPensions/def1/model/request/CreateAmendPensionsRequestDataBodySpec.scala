@@ -17,7 +17,7 @@
 package v1.createAmendPensions.def1.model.request
 
 import play.api.libs.json.{JsError, JsObject, Json}
-import shared.UnitSpec
+import shared.utils.UnitSpec
 import v1.createAmendPensions.model.request.Def1_CreateAmendPensionsRequestBody
 
 class CreateAmendPensionsRequestDataBodySpec extends UnitSpec {

@@ -16,7 +16,7 @@
 
 package shared.utils.enums
 
-import shapeless.{:+:, CNil, Coproduct, Generic, Witness}
+import shapeless._
 
 import scala.annotation.nowarn
 
@@ -28,8 +28,8 @@ object Values {
   }
 
   object MkValues {
-
-    implicit def values[E, Impls <: Coproduct](implicit @nowarn("msg=parameter gen") gen: Generic.Aux[E, Impls], v: Aux[E, Impls]): MkValues[E] =
+    implicit def values[E, Impls <: Coproduct](implicit @nowarn("msg=parameter gen") gen: Generic.Aux[E, Impls],
+                                               v: Aux[E, Impls]): MkValues[E] =
       new MkValues[E] {
         def values: List[E] = v.values
       }
@@ -39,7 +39,6 @@ object Values {
     }
 
     object Aux {
-
       implicit def cnilAux[E]: Aux[E, CNil] =
         new Aux[E, CNil] {
           def values: List[E] = Nil
@@ -49,9 +48,6 @@ object Values {
         new Aux[E, L :+: R] {
           def values: List[E] = l.value :: r.values
         }
-
     }
-
   }
-
 }

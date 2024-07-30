@@ -16,15 +16,15 @@
 
 package shared.services
 
-import shared.connectors.{MockMtdIdLookupConnector, MtdIdLookupOutcome}
+import shared.connectors.{MockMtdIdLookupConnector, MtdIdLookupConnector}
 import shared.models.errors._
+import shared.services.MtdIdLookupService.Outcome
 
 import scala.concurrent.Future
 
 class MtdIdLookupServiceSpec extends ServiceSpec {
 
-  val nino        = "AA123456A"
-  val invalidNino = "INVALID_NINO"
+  val nino = "AA123456A"
 
   trait Test extends MockMtdIdLookupConnector {
     lazy val target = new MtdIdLookupService(mockMtdIdLookupConnector)
@@ -32,44 +32,49 @@ class MtdIdLookupServiceSpec extends ServiceSpec {
 
   "calling .getMtdId" when {
 
+    "an mtdId is found for the NINO" should {
+      "return the mtdId" in new Test {
+        val mtdId = "someMtdId"
+        MockedMtdIdLookupConnector.lookup(nino) returns Future.successful(Right(mtdId))
+        val result: Outcome = await(target.lookup(nino))
+
+        result shouldBe Right(mtdId)
+      }
+    }
+
     "an invalid NINO is passed in" should {
-      "return a valid mtdId" in new Test {
+      "return NinoFormatError" in new Test {
+        val invalidNino     = "INVALID_NINO"
+        val result: Outcome = await(target.lookup(invalidNino))
 
-        val expected = Left(NinoFormatError)
-
-        // should not call the connector
-        MockedMtdIdLookupConnector
-          .lookup(invalidNino)
-          .never()
-
-        val result: MtdIdLookupOutcome = await(target.lookup(invalidNino))
-        result shouldBe expected
+        result shouldBe Left(NinoFormatError)
       }
     }
 
-    "a not authorised error occurs the service" should {
-      "proxy the error to the caller" in new Test {
-        val connectorResponse = Left(ClientNotAuthorisedError)
+    "the downstream service returns a 403 status error" should {
+      "return ClientOrAgentNotAuthorisedError" in new Test {
+        MockedMtdIdLookupConnector.lookup(nino) returns Future.successful(Left(MtdIdLookupConnector.Error(FORBIDDEN)))
+        val result: Outcome = await(target.lookup(nino))
 
-        MockedMtdIdLookupConnector
-          .lookup(nino)
-          .returns(Future.successful(connectorResponse))
-
-        val result: MtdIdLookupOutcome = await(target.lookup(nino))
-        result shouldBe connectorResponse
+        result shouldBe Left(ClientOrAgentNotAuthorisedError)
       }
     }
 
-    "a downstream error occurs the service" should {
-      "proxy the error to the caller" in new Test {
-        val connectorResponse = Left(InternalError)
+    "the downstream service returns a 401 status error" should {
+      "return InvalidBearerTokenError" in new Test {
+        MockedMtdIdLookupConnector.lookup(nino) returns Future.successful(Left(MtdIdLookupConnector.Error(UNAUTHORIZED)))
+        val result: Outcome = await(target.lookup(nino))
 
-        MockedMtdIdLookupConnector
-          .lookup(nino)
-          .returns(Future.successful(connectorResponse))
+        result shouldBe Left(InvalidBearerTokenError)
+      }
+    }
 
-        val result: MtdIdLookupOutcome = await(target.lookup(nino))
-        result shouldBe connectorResponse
+    "the downstream service returns another status code" should {
+      "return InternalError" in new Test {
+        MockedMtdIdLookupConnector.lookup(nino) returns Future.successful(Left(MtdIdLookupConnector.Error(IM_A_TEAPOT)))
+        val result: Outcome = await(target.lookup(nino))
+
+        result shouldBe Left(InternalError)
       }
     }
 

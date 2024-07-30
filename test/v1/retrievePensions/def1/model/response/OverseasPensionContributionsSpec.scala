@@ -17,7 +17,7 @@
 package v1.retrievePensions.def1.model.response
 
 import play.api.libs.json.{JsError, JsObject, Json}
-import shared.UnitSpec
+import shared.utils.UnitSpec
 
 class OverseasPensionContributionsSpec extends UnitSpec {
 

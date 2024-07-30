@@ -16,8 +16,8 @@
 
 package shared.config.rewriters
 
-import shared.UnitSpec
 import shared.config.MockAppConfig
+import shared.utils.UnitSpec
 
 class ApiVersionTitleRewriterSpec extends UnitSpec with MockAppConfig {
 
@@ -42,7 +42,7 @@ class ApiVersionTitleRewriterSpec extends UnitSpec with MockAppConfig {
     }
 
     "rewriting the title" should {
-      "return the title unchanged if it already contains '[Test only]'" in {
+      "return the title unchanged if it already contains '[test only]'" in {
         val title  = """  title: "[tesT oNLy] API title (MTD)""""
         val result = checkAndRewrite.rewrite("", "", title)
         result shouldBe title
@@ -70,7 +70,7 @@ class ApiVersionTitleRewriterSpec extends UnitSpec with MockAppConfig {
                     |
                     |info:
                     |  version: "1.0"
-                    |  title: "Individuals Expenses (MTD) [Test only]"
+                    |  title: "Individuals Expenses (MTD) [test only]"
                     |  description: |
                     |    # Send fraud prevention data
                     |    HMRC monitors transactions to help protect your customers' confidential data from criminals and fraudsters.
@@ -85,7 +85,7 @@ class ApiVersionTitleRewriterSpec extends UnitSpec with MockAppConfig {
 
       "return the rewritten title if the yaml title is in quotes" in {
         val title    = """  title: "API title (MTD)""""
-        val expected = """  title: "API title (MTD) [Test only]""""
+        val expected = """  title: "API title (MTD) [test only]""""
         val result   = checkAndRewrite.rewrite("", "", title)
         result shouldBe expected
       }

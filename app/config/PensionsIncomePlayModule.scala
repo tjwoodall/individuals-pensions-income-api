@@ -17,12 +17,16 @@
 package config
 
 import com.google.inject.AbstractModule
-import shared.config.AppConfig
+import definition.PensionsIncomeDefinitionFactory
+import routing.PensionsIncomeRoutingMap
+import shared.definition.ApiDefinitionFactory
+import shared.routing.VersionRoutingMap
 
 class PensionsIncomePlayModule extends AbstractModule {
 
   override def configure(): Unit = {
-    bind(classOf[AppConfig]).asEagerSingleton()
+    bind(classOf[ApiDefinitionFactory]).to(classOf[PensionsIncomeDefinitionFactory]).asEagerSingleton()
+    bind(classOf[VersionRoutingMap]).to(classOf[PensionsIncomeRoutingMap]).asEagerSingleton()
   }
 
 }

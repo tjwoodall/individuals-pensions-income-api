@@ -18,20 +18,23 @@ package v1.retrievePensions.def1
 
 import cats.data.Validated
 import cats.implicits._
-import shared.config.AppConfig
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
+import v1.retrievePensions.def1.Def1_RetrievePensionsValidator.resolveTaxYear
 import v1.retrievePensions.model.request.{Def1_RetrievePensionsRequestData, RetrievePensionsRequestData}
-class Def1_RetrievePensionsValidator (nino: String, taxYear: String)(appConfig: AppConfig) extends Validator[RetrievePensionsRequestData] {
 
-  private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
-  private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(minimumTaxYear))
-      def validate: Validated[Seq[MtdError], RetrievePensionsRequestData] =
-        (
-          ResolveNino(nino),
-          resolveTaxYear(taxYear)
-        ).mapN(Def1_RetrievePensionsRequestData)
+class Def1_RetrievePensionsValidator(nino: String, taxYear: String) extends Validator[RetrievePensionsRequestData] {
 
-    }
+  def validate: Validated[Seq[MtdError], RetrievePensionsRequestData] =
+    (
+      ResolveNino(nino),
+      resolveTaxYear(taxYear)
+    ).mapN(Def1_RetrievePensionsRequestData)
+
+}
+
+object Def1_RetrievePensionsValidator {
+  private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(2020))
+}

@@ -16,16 +16,13 @@
 
 package v1.retrievePensions
 
-import shared.config.AppConfig
 import shared.controllers.validators.Validator
 import v1.retrievePensions.def1.Def1_RetrievePensionsValidator
 import v1.retrievePensions.model.request.RetrievePensionsRequestData
 
-import javax.inject.Inject
-
-class RetrievePensionsValidatorFactory @Inject() (appConfig: AppConfig) {
+class RetrievePensionsValidatorFactory {
 
   def validator(nino: String, taxYear: String): Validator[RetrievePensionsRequestData] =
-    new Def1_RetrievePensionsValidator(nino, taxYear)(appConfig)
+    new Def1_RetrievePensionsValidator(nino, taxYear)
 
 }

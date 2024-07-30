@@ -17,7 +17,7 @@
 package v1.createAmendPensions
 
 import play.api.libs.json.Json
-import shared.UnitSpec
+import shared.utils.UnitSpec
 import shared.config.MockAppConfig
 import shared.controllers.validators.Validator
 import shared.models.utils.JsonErrorValidators
@@ -75,7 +75,7 @@ class CreateAmendPensionsValidatorFactorySpec extends UnitSpec with MockAppConfi
       """.stripMargin
   )
 
-  private val validatorFactory = new CreateAmendPensionsValidatorFactory(mockAppConfig)
+  private val validatorFactory = new CreateAmendPensionsValidatorFactory
 
   "validator()" when {
     "given any tax year" should {

@@ -38,8 +38,6 @@ class AppConfig @Inject() (config: ServicesConfig, configuration: Configuration)
   // MTD ID Lookup Config
   def mtdIdBaseUrl: String = config.baseUrl("mtd-id-lookup")
 
-  def minimumPermittedTaxYear: Int = config.getInt("minimumPermittedTaxYear")
-
   // Des Config
   def desBaseUrl: String                         = config.baseUrl("des")
   def desEnv: String                             = config.getString("microservice.services.des.env")
@@ -70,16 +68,20 @@ class AppConfig @Inject() (config: ServicesConfig, configuration: Configuration)
 
   // API Config
   def apiGatewayContext: String                    = config.getString("api.gateway.context")
-  def mtdNrsProxyBaseUrl: String                   = config.baseUrl("mtd-api-nrs-proxy")
   def confidenceLevelConfig: ConfidenceLevelConfig = configuration.get[ConfidenceLevelConfig](s"api.confidence-level-check")
 
   def apiStatus(version: Version): String = config.getString(s"api.$version.status")
 
-  def isApiDeprecated(version: Version): Boolean = apiStatus(version) == "DEPRECATED"
-
   def featureSwitchConfig: Configuration = configuration.getOptional[Configuration](s"feature-switch").getOrElse(Configuration.empty)
 
   def endpointsEnabled(version: String): Boolean = config.getBoolean(s"api.$version.endpoints.enabled")
+
+  /** Like endpointsEnabled, but will return false if version doesn't exist.
+    */
+  def safeEndpointsEnabled(version: String): Boolean =
+    configuration
+      .getOptional[Boolean](s"api.$version.endpoints.enabled")
+      .getOrElse(false)
 
   def endpointsEnabled(version: Version): Boolean = config.getBoolean(s"api.$version.endpoints.enabled")
 
@@ -147,9 +149,13 @@ case class ConfidenceLevelConfig(confidenceLevel: ConfidenceLevel, definitionEna
 object ConfidenceLevelConfig {
 
   implicit val configLoader: ConfigLoader[ConfidenceLevelConfig] = (rootConfig: Config, path: String) => {
-    val config = rootConfig.getConfig(path)
+    val config             = rootConfig.getConfig(path)
+    val confidenceLevelInt = config.getInt("confidence-level")
+
     ConfidenceLevelConfig(
-      confidenceLevel = ConfidenceLevel.fromInt(config.getInt("confidence-level")).getOrElse(ConfidenceLevel.L200),
+      confidenceLevel = ConfidenceLevel
+        .fromInt(confidenceLevelInt)
+        .get, // let the Exception propagate if thrown by fromInt
       definitionEnabled = config.getBoolean("definition.enabled"),
       authValidationEnabled = config.getBoolean("auth-validation.enabled")
     )

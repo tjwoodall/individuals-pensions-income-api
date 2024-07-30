@@ -16,78 +16,69 @@
 
 package shared.definition
 
-import shared.UnitSpec
-import shared.config.{ConfidenceLevelConfig, MockAppConfig}
+import cats.implicits.catsSyntaxValidatedId
+import shared.config.Deprecation.NotDeprecated
+import shared.config.{AppConfig, ConfidenceLevelConfig, MockAppConfig}
 import shared.definition.APIStatus.{ALPHA, BETA}
 import shared.mocks.MockHttpClient
-import shared.routing.Version1
+import shared.routing._
+import shared.utils.UnitSpec
 import uk.gov.hmrc.auth.core.ConfidenceLevel
+
+import scala.language.reflectiveCalls
 
 class ApiDefinitionFactorySpec extends UnitSpec {
 
-  class Test extends MockHttpClient with MockAppConfig {
-    val apiDefinitionFactory = new ApiDefinitionFactory(mockAppConfig)
-    MockAppConfig.apiGatewayContext returns "individuals/income-received"
-  }
+  "buildAPIStatus" when {
+    "the 'apiStatus' parameter is present and valid" should {
 
-  private val confidenceLevel: ConfidenceLevel = ConfidenceLevel.L200
+      s"return the expected status" in new Test {
+        setupMockConfig(Version9)
+        MockAppConfig.apiStatus(Version9) returns "BETA"
 
-  "definition" when {
-    "called" should {
-      "return a valid Definition case class" in new Test {
-        MockAppConfig.apiStatus(Version1) returns "BETA"
-        MockAppConfig.endpointsEnabled(Version1) returns true
-        MockAppConfig.confidenceLevelCheckEnabled
-          .returns(ConfidenceLevelConfig(confidenceLevel = confidenceLevel, definitionEnabled = true, authValidationEnabled = true))
+        val result: APIStatus = apiDefinitionFactory.checkBuildApiStatus(Version9)
+        result shouldBe BETA
+      }
+
+    }
+
+    "the 'apiStatus' parameter is present but invalid" should {
+      s"default to alpha" in new Test {
+        setupMockConfig(Version9)
+        MockAppConfig.apiStatus(Version9) returns "not-a-status"
+
+        apiDefinitionFactory.checkBuildApiStatus(Version9) shouldBe ALPHA
+      }
+    }
+
+    "the 'deprecatedOn' parameter is missing for a deprecated version" should {
+      "throw an exception" in new Test {
+        MockAppConfig.apiStatus(Version9) returns "DEPRECATED"
+
+        MockAppConfig
+          .deprecationFor(Version9)
+          .returns("deprecatedOn date is required for a deprecated version".invalid)
           .anyNumberOfTimes()
 
-        private val readScope  = "read:self-assessment"
-        private val writeScope = "write:self-assessment"
+        val exception: Exception = intercept[Exception] {
+          apiDefinitionFactory.checkBuildApiStatus(Version9)
+        }
 
-        apiDefinitionFactory.definition shouldBe
-          Definition(
-            scopes = Seq(
-              Scope(
-                key = readScope,
-                name = "View your Self Assessment information",
-                description = "Allow read access to self assessment data",
-                confidenceLevel
-              ),
-              Scope(
-                key = writeScope,
-                name = "Change your Self Assessment information",
-                description = "Allow write access to self assessment data",
-                confidenceLevel
-              )
-            ),
-            api = APIDefinition(
-              name = "Individuals Pensions Income (MTD)",
-              description = "An API for providing individual pensions income data",
-              context = "individuals/income-received",
-              categories = Seq("INCOME_TAX_MTD"),
-              versions = Seq(
-                APIVersion(
-                  version = Version1,
-                  status = BETA,
-                  endpointsEnabled = true
-                )
-              ),
-              requiresTrust = None
-            )
-          )
+        val exceptionMessage: String = exception.getMessage
+        exceptionMessage shouldBe "deprecatedOn date is required for a deprecated version"
       }
     }
   }
 
   "confidenceLevel" when {
-    Seq(
+    List(
       (true, ConfidenceLevel.L250, ConfidenceLevel.L250),
       (true, ConfidenceLevel.L200, ConfidenceLevel.L200),
       (false, ConfidenceLevel.L200, ConfidenceLevel.L50)
     ).foreach { case (definitionEnabled, configCL, expectedDefinitionCL) =>
       s"confidence-level-check.definition.enabled is $definitionEnabled and confidence-level = $configCL" should {
         s"return confidence level $expectedDefinitionCL" in new Test {
-          MockAppConfig.confidenceLevelCheckEnabled returns ConfidenceLevelConfig(
+          MockAppConfig.confidenceLevelConfig returns ConfidenceLevelConfig(
             confidenceLevel = configCL,
             definitionEnabled = definitionEnabled,
             authValidationEnabled = true)
@@ -97,20 +88,33 @@ class ApiDefinitionFactorySpec extends UnitSpec {
     }
   }
 
-  "buildAPIStatus" when {
-    "the 'apiStatus' parameter is present and valid" should {
-      "return the correct status" in new Test {
-        MockAppConfig.apiStatus(Version1) returns "BETA"
-        apiDefinitionFactory.buildAPIStatus(Version1) shouldBe BETA
-      }
+  class Test extends MockHttpClient with MockAppConfig {
+    MockAppConfig.apiGatewayContext returns "individuals/self-assessment/adjustable-summary"
+
+    protected val apiDefinitionFactory = new ApiDefinitionFactory {
+      protected val appConfig: AppConfig = mockAppConfig
+
+      val definition: Definition = Definition(
+        Nil,
+        APIDefinition(
+          "test API definition",
+          "description",
+          "context",
+          List("category"),
+          List(APIVersion(Version1, APIStatus.BETA, endpointsEnabled = true)),
+          None)
+      )
+
+      def checkBuildApiStatus(version: Version): APIStatus = buildAPIStatus(version)
     }
 
-    "the 'apiStatus' parameter is present and invalid" should {
-      "default to alpha" in new Test {
-        MockAppConfig.apiStatus(Version1) returns "ALPHO"
-        apiDefinitionFactory.buildAPIStatus(Version1) shouldBe ALPHA
-      }
+    protected def setupMockConfig(version: Version): Unit = {
+      MockAppConfig
+        .deprecationFor(version)
+        .returns(NotDeprecated.valid)
+        .anyNumberOfTimes()
     }
+
   }
 
 }

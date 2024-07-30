@@ -19,7 +19,7 @@ package v1.deletePensions
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import shared.config.AppConfig
 import shared.controllers._
-import shared.routing.Version1
+import shared.routing.Version
 import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import shared.utils.IdGenerator
 
@@ -55,7 +55,7 @@ class DeletePensionsController @Inject() (val authService: EnrolmentsAuthService
           AuditHandler(
             auditService,
             auditType = "DeletePensionsIncome",
-            apiVersion = Version1,
+            apiVersion = Version(request),
             transactionName = "delete-pensions-income",
             params = Map("nino" -> nino, "taxYear" -> taxYear)
           ))

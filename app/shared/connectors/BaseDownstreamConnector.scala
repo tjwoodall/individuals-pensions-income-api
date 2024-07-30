@@ -18,8 +18,8 @@ package shared.connectors
 
 import play.api.http.{HeaderNames, MimeTypes}
 import play.api.libs.json.Writes
-import shared.config.AppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.config.{AppConfig, DownstreamConfig}
+import shared.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
 import shared.utils.Logging
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
 
@@ -41,7 +41,7 @@ trait BaseDownstreamConnector extends Logging {
       http.POST(getBackendUri(uri), body)
     }
 
-    doPost(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader))
+    doPost(getBackendHeaders(uri, jsonContentTypeHeader))
   }
 
   def get[Resp](uri: DownstreamUri[Resp])(implicit
@@ -53,7 +53,7 @@ trait BaseDownstreamConnector extends Logging {
     def doGet(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] =
       http.GET(getBackendUri(uri))
 
-    doGet(getBackendHeaders(uri, hc, correlationId))
+    doGet(getBackendHeaders(uri))
   }
 
   def get[Resp](uri: DownstreamUri[Resp], queryParams: Seq[(String, String)])(implicit
@@ -65,7 +65,7 @@ trait BaseDownstreamConnector extends Logging {
     def doGet(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] =
       http.GET(getBackendUri(uri), queryParams)
 
-    doGet(getBackendHeaders(uri, hc, correlationId))
+    doGet(getBackendHeaders(uri))
   }
 
   def delete[Resp](uri: DownstreamUri[Resp])(implicit
@@ -78,10 +78,10 @@ trait BaseDownstreamConnector extends Logging {
       http.DELETE(getBackendUri(uri))
     }
 
-    doDelete(getBackendHeaders(uri, hc, correlationId))
+    doDelete(getBackendHeaders(uri))
   }
 
-  def put[Body: Writes, Resp](body: Body, uri: DownstreamUri[Resp])(implicit
+  def put[Body: Writes, Resp](body: Body, uri: DownstreamUri[Resp], maybeIntent: Option[String] = None)(implicit
       ec: ExecutionContext,
       hc: HeaderCarrier,
       httpReads: HttpReads[DownstreamOutcome[Resp]],
@@ -91,22 +91,21 @@ trait BaseDownstreamConnector extends Logging {
       http.PUT(getBackendUri(uri), body)
     }
 
-    doPut(getBackendHeaders(uri, hc, correlationId, jsonContentTypeHeader))
+    maybeIntent match {
+      case Some(intent) => doPut(getBackendHeaders(uri, jsonContentTypeHeader, intentHeader(intent)))
+      case None         => doPut(getBackendHeaders(uri, jsonContentTypeHeader))
+    }
   }
 
   private def getBackendUri[Resp](uri: DownstreamUri[Resp]): String =
     s"${configFor(uri).baseUrl}/${uri.value}"
 
-  private def getBackendHeaders[Resp](uri: DownstreamUri[Resp],
-                                      hc: HeaderCarrier,
-                                      correlationId: String,
-                                      additionalHeaders: (String, String)*): HeaderCarrier = {
+  private def getBackendHeaders[Resp](
+      uri: DownstreamUri[Resp],
+      additionalHeaders: (String, String)*
+  )(implicit hc: HeaderCarrier, correlationId: String): HeaderCarrier = {
 
     val downstreamConfig = configFor(uri)
-
-    val passThroughHeaders = hc
-      .headers(downstreamConfig.environmentHeaders.getOrElse(Seq.empty))
-      .filterNot(hdr => additionalHeaders.exists(_._1.equalsIgnoreCase(hdr._1)))
 
     HeaderCarrier(
       extraHeaders = hc.extraHeaders ++
@@ -117,14 +116,33 @@ trait BaseDownstreamConnector extends Logging {
           "CorrelationId" -> correlationId
         ) ++
         additionalHeaders ++
-        passThroughHeaders
+        passThroughHeaders(downstreamConfig, additionalHeaders)
     )
+  }
+
+  /** Only allows certain headers to be passed through to downstream.
+    * @param additionalHeaders
+    *   contains headers that we're sending, so should be removed from client passthrough headers
+    * @param hc
+    *   contains the allowed headers
+    * @return
+    *   filtered allowed passThroughHeaders
+    */
+  private[connectors] def passThroughHeaders(
+      downstreamConfig: DownstreamConfig,
+      additionalHeaders: Seq[(String, String)]
+  )(implicit hc: HeaderCarrier): Seq[(String, String)] = {
+    hc
+      .headers(downstreamConfig.environmentHeaders.getOrElse(Nil))
+      .filterNot(hdr => additionalHeaders.exists(_._1.equalsIgnoreCase(hdr._1)))
   }
 
   private def configFor[Resp](uri: DownstreamUri[Resp]) =
     uri match {
+      case DesUri(_)                => appConfig.desDownstreamConfig
       case IfsUri(_)                => appConfig.ifsDownstreamConfig
       case TaxYearSpecificIfsUri(_) => appConfig.tysIfsDownstreamConfig
     }
 
+  private def intentHeader(maybeIntent: String): (String, String) = "intent" -> maybeIntent
 }

@@ -14,26 +14,18 @@
  * limitations under the License.
  */
 
-package shared.models.errors
+package shared.hateoas
 
-import play.api.libs.json.Json
-import shared.UnitSpec
+import play.api.libs.json.Format
+import shared.utils.enums.Enums
 
-class DownstreamErrorCodeSpec extends UnitSpec {
+sealed trait Method
 
-  "reads" should {
-    val json = Json.parse(
-      """
-        |{
-        |   "code": "CODE",
-        |   "reason": "ignored"
-        |}
-      """.stripMargin
-    )
+object Method {
+  case object GET    extends Method
+  case object POST   extends Method
+  case object DELETE extends Method
+  case object PUT    extends Method
 
-    "generate the correct error code" in {
-      json.as[DownstreamErrorCode] shouldBe DownstreamErrorCode("CODE")
-    }
-  }
-
+  implicit val formats: Format[Method] = Enums.format[Method]
 }

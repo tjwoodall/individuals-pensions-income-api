@@ -17,8 +17,8 @@
 package shared.models.errors
 
 import play.api.libs.json.Json
-import shared.UnitSpec
 import shared.models.audit.AuditError
+import shared.utils.UnitSpec
 
 class ErrorWrapperSpec extends UnitSpec {
 

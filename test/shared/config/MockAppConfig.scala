@@ -30,8 +30,6 @@ trait MockAppConfig extends MockFactory {
     // MTD ID Lookup Config
     def mtdIdBaseUrl: CallHandler0[String] = (() => mockAppConfig.mtdIdBaseUrl: String).expects()
 
-    def minimumPermittedTaxYear: CallHandler0[Int] = (() => mockAppConfig.minimumPermittedTaxYear: Int).expects()
-
     // DES Config
     def desBaseUrl: CallHandler0[String]                         = (() => mockAppConfig.desBaseUrl: String).expects()
     def desToken: CallHandler0[String]                           = (() => mockAppConfig.desToken: String).expects()
@@ -72,10 +70,8 @@ trait MockAppConfig extends MockFactory {
     def endpointReleasedInProduction(version: String, key: String): CallHandler[Boolean] =
       (mockAppConfig.endpointReleasedInProduction: (String, String) => Boolean).expects(version, key)
 
-    def confidenceLevelCheckEnabled: CallHandler0[ConfidenceLevelConfig] =
+    def confidenceLevelConfig: CallHandler0[ConfidenceLevelConfig] =
       (() => mockAppConfig.confidenceLevelConfig).expects()
-
-    def mtdNrsProxyBaseUrl: CallHandler0[String] = (() => mockAppConfig.mtdNrsProxyBaseUrl).expects()
 
     def allowRequestCannotBeFulfilledHeader(version: Version): CallHandler[Boolean] =
       (mockAppConfig.allowRequestCannotBeFulfilledHeader: Version => Boolean).expects(version)

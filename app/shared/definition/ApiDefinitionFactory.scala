@@ -16,19 +16,20 @@
 
 package shared.definition
 
-import play.api.Logger
+import cats.data.Validated.Invalid
 import shared.config.AppConfig
-import shared.routing.{Version, Version1}
+import shared.routing.Version
+import shared.utils.Logging
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 
-import javax.inject.{Inject, Singleton}
+trait ApiDefinitionFactory extends Logging {
 
-@Singleton
-class ApiDefinitionFactory @Inject() (appConfig: AppConfig) {
+  protected val readScope  = "read:self-assessment"
+  protected val writeScope = "write:self-assessment"
 
-  private val readScope      = "read:self-assessment"
-  private val writeScope     = "write:self-assessment"
-  private val logger: Logger = Logger(this.getClass)
+  protected val mtdCategory = "INCOME_TAX_MTD"
+
+  protected val appConfig: AppConfig
 
   lazy val confidenceLevel: ConfidenceLevel = {
     val clConfig = appConfig.confidenceLevelConfig
@@ -36,45 +37,38 @@ class ApiDefinitionFactory @Inject() (appConfig: AppConfig) {
     if (clConfig.definitionEnabled) clConfig.confidenceLevel else ConfidenceLevel.L50
   }
 
-  lazy val definition: Definition =
-    Definition(
-      scopes = List(
-        Scope(
-          key = readScope,
-          name = "View your Self Assessment information",
-          description = "Allow read access to self assessment data",
-          confidenceLevel = confidenceLevel
-        ),
-        Scope(
-          key = writeScope,
-          name = "Change your Self Assessment information",
-          description = "Allow write access to self assessment data",
-          confidenceLevel = confidenceLevel
-        )
-      ),
-      api = APIDefinition(
-        name = "Individuals Pensions Income (MTD)",
-        description = "An API for providing individual pensions income data",
-        context = appConfig.apiGatewayContext,
-        categories = List("INCOME_TAX_MTD"),
-        versions = List(
-          APIVersion(
-            version = Version1,
-            status = buildAPIStatus(Version1),
-            endpointsEnabled = appConfig.endpointsEnabled(Version1)
-          )
-        ),
-        requiresTrust = None
-      )
+  lazy protected val scopes: Seq[Scope] = List(
+    Scope(
+      key = readScope,
+      name = "View your Self Assessment information",
+      description = "Allow read access to self assessment data",
+      confidenceLevel = confidenceLevel
+    ),
+    Scope(
+      key = writeScope,
+      name = "Change your Self Assessment information",
+      description = "Allow write access to self assessment data",
+      confidenceLevel = confidenceLevel
     )
+  )
 
-  private[definition] def buildAPIStatus(version: Version): APIStatus = {
+  val definition: Definition
+
+  protected def buildAPIStatus(version: Version): APIStatus = {
+    checkDeprecationConfigFor(version)
+
     APIStatus.parser
       .lift(appConfig.apiStatus(version))
       .getOrElse {
-        logger.error(s"[ApiDefinition][buildApiStatus] no API Status found in config.  Reverting to Alpha")
+        logger.error("[ApiDefinition][buildApiStatus] no API Status found in config. Reverting to Alpha")
         APIStatus.ALPHA
       }
   }
+
+  private def checkDeprecationConfigFor(version: Version): Unit =
+    appConfig.deprecationFor(version) match {
+      case Invalid(error) => throw new Exception(error)
+      case _              => ()
+    }
 
 }

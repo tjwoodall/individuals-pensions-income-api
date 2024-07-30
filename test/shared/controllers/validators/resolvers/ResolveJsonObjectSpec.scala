@@ -18,9 +18,9 @@ package shared.controllers.validators.resolvers
 
 import cats.data.Validated.{Invalid, Valid}
 import play.api.libs.json.{Json, Reads}
-import shared.UnitSpec
 import shared.models.errors.RuleIncorrectOrEmptyBodyError
 import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 
 class ResolveJsonObjectSpec extends UnitSpec with JsonErrorValidators {
 
@@ -40,16 +40,14 @@ class ResolveJsonObjectSpec extends UnitSpec with JsonErrorValidators {
       }
     }
 
-    "return an error " when {
+    "return the expected error " when {
       "a required field is missing" in {
         val json = Json.parse("""{ "fieldOne" : "field one" }""")
 
         val result = resolve(json)
         result shouldBe Invalid(List(RuleIncorrectOrEmptyBodyError.withPath("/fieldTwo")))
       }
-
     }
-
   }
 
 }

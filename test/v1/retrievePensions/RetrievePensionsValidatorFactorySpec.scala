@@ -16,7 +16,7 @@
 
 package v1.retrievePensions
 
-import shared.UnitSpec
+import shared.utils.UnitSpec
 import shared.config.MockAppConfig
 import shared.controllers.validators.Validator
 import v1.retrievePensions.def1.Def1_RetrievePensionsValidator
@@ -26,7 +26,7 @@ class RetrievePensionsValidatorFactorySpec extends UnitSpec with MockAppConfig {
 
   private val validNino    = "AA123456A"
   private val validTaxYear = "2021-22"
-  val validatorFactory     = new RetrievePensionsValidatorFactory(mockAppConfig)
+  val validatorFactory     = new RetrievePensionsValidatorFactory
 
   "validator()" when {
 

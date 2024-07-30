@@ -39,7 +39,7 @@ import javax.inject.{Inject, Singleton}
               .split("title: ")(1)
               .replace("\"", "")
 
-            val replacement = s"""  title: "$title [Test only]""""
+            val replacement = s"""  title: "$title [test only]""""
             rewriteTitleRegex.replaceFirstIn(yaml, replacement)
         }
         .getOrElse(yaml)
