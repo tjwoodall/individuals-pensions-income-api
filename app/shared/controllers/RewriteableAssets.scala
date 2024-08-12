@@ -16,6 +16,7 @@
 
 package controllers
 
+import controllers.{Assets, AssetsMetadata}
 import play.api.Environment
 import play.api.http.{AcceptEncoding, HttpErrorHandler}
 import play.api.mvc.{Action, AnyContent, RequestHeader, Result}

@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package shared.config
+package config
 
 import play.api.Configuration
-import shared.utils.UnitSpec
+import shared.config.{AppConfig, FeatureSwitches}
 
-class FeatureSwitchesSpec extends UnitSpec with FeatureSwitchesBehaviour[FeatureSwitches] {
+/** API-specific feature switches.
+  */
+case class PensionsIncomeFeatureSwitches private (protected val featureSwitchConfig: Configuration) extends FeatureSwitches {
 
-  override def featureSwitches(configuration: Configuration): FeatureSwitches = new FeatureSwitches {
-    override protected val featureSwitchConfig: Configuration = configuration
-  }
+  def isIfsEnabled: Boolean      = isEnabled("ifs")
+  def isIfsInProduction: Boolean = isReleasedInProduction("ifs")
+}
 
-  "isEnabled" should {
-    behave like aFeatureSwitchWithKey("some-feature.enabled", _.isEnabled("some-feature"))
-  }
-
-  "isReleasedInProduction" should {
-    behave like aFeatureSwitchWithKey("some-feature.released-in-production", _.isReleasedInProduction("some-feature"))
-  }
-
+object PensionsIncomeFeatureSwitches {
+  def apply()(implicit appConfig: AppConfig): PensionsIncomeFeatureSwitches = PensionsIncomeFeatureSwitches(appConfig.featureSwitchConfig)
 }

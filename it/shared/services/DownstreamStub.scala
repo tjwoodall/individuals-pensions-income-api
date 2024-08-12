@@ -1,4 +1,4 @@
-package shared.stubs
+package shared.services
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.libs.json.JsValue
@@ -30,4 +30,5 @@ object DownstreamStub extends WireMockMethods {
     when(method = method, uri = uri, queryParams)
       .thenReturn(status = errorStatus, errorBody)
   }
+
 }

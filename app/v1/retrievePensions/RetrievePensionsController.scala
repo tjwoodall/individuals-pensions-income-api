@@ -34,6 +34,8 @@ class RetrievePensionsController @Inject() (val authService: EnrolmentsAuthServi
                                             val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  val endpointName = "retrieve-pensions-income"
+
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
       controllerName = "RetrievePensionsController",

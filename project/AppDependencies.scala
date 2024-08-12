@@ -15,8 +15,8 @@
  */
 
 import play.core.PlayVersion
-import play.sbt.PlayImport._
-import sbt._
+import play.sbt.PlayImport.*
+import sbt.*
 
 object AppDependencies {
 
@@ -25,7 +25,7 @@ object AppDependencies {
   val compile: Seq[ModuleID] = List(
     ws,
     "uk.gov.hmrc"                  %% "bootstrap-backend-play-30" % bootstrapPlayVersion,
-    "org.typelevel"                %% "cats-core"                 % "2.9.0",
+    "org.typelevel"                %% "cats-core"                 % "2.12.0",
     "com.chuusai"                  %% "shapeless"                 % "2.4.0-M1",
     "com.neovisionaries"            % "nv-i18n"                   % "1.29",
     "com.fasterxml.jackson.module" %% "jackson-module-scala"      % "2.15.2",

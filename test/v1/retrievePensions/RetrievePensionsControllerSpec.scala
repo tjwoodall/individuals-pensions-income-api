@@ -16,6 +16,7 @@
 
 package v1.retrievePensions
 
+import play.api.Configuration
 import play.api.mvc.Result
 import shared.config.MockAppConfig
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
@@ -137,7 +138,13 @@ class RetrievePensionsControllerSpec
       idGenerator = mockIdGenerator
     )
 
+    MockedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> false
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
     protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakeGetRequest)
+
   }
 
 }

@@ -16,9 +16,10 @@
 
 package v1.deletePensions
 
+import config.MockPensionsIncomeConfig
+import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import shared.config.MockAppConfig
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.domain.{Nino, TaxYear}
@@ -34,7 +35,7 @@ class DeletePensionsControllerSpec
     with ControllerTestRunner
     with MockDeletePensionsService
     with MockDeletePensionsValidatorFactory
-    with MockAppConfig {
+    with MockPensionsIncomeConfig {
 
   private val taxYear = "2021-22"
 
@@ -87,6 +88,12 @@ class DeletePensionsControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> false
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.deletePensions(validNino, taxYear)(fakeRequest)
 

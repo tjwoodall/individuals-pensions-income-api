@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package shared.config
+package config
 
 import play.api.Configuration
-import shared.utils.UnitSpec
+import shared.config.FeatureSwitches
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
-class FeatureSwitchesSpec extends UnitSpec with FeatureSwitchesBehaviour[FeatureSwitches] {
+import javax.inject.{Inject, Singleton}
 
-  override def featureSwitches(configuration: Configuration): FeatureSwitches = new FeatureSwitches {
-    override protected val featureSwitchConfig: Configuration = configuration
-  }
+/** Put API-specific config here...
+  */
+@Singleton
+class PensionsIncomeConfig @Inject()(config: ServicesConfig, configuration: Configuration) {
 
-  "isEnabled" should {
-    behave like aFeatureSwitchWithKey("some-feature.enabled", _.isEnabled("some-feature"))
-  }
+  def featureSwitchConfig: Configuration = configuration.getOptional[Configuration](s"feature-switch").getOrElse(Configuration.empty)
 
-  "isReleasedInProduction" should {
-    behave like aFeatureSwitchWithKey("some-feature.released-in-production", _.isReleasedInProduction("some-feature"))
-  }
+  def featureSwitches: FeatureSwitches = PensionsIncomeFeatureSwitches(featureSwitchConfig)
+
 
 }

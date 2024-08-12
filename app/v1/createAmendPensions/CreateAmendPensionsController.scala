@@ -37,6 +37,8 @@ class CreateAmendPensionsController @Inject() (val authService: EnrolmentsAuthSe
                                                val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  val endpointName = "create-amend-pensions-income"
+
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
       controllerName = "CreateAmendPensionsController",
