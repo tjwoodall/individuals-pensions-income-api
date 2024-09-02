@@ -71,7 +71,10 @@ class AuthISpec extends IntegrationBaseSpec {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.DELETE, ifsUri, NO_CONTENT)
+          //DownstreamStub.onSuccess(DownstreamStub.DELETE, ifsUri, NO_CONTENT)
+          DownstreamStub
+            .when(DownstreamStub.DELETE, ifsUri)
+            .thenReturn(NO_CONTENT, None)
         }
 
         val response: WSResponse = await(request().delete())
