@@ -27,7 +27,6 @@ class PensionsIncomeDefinitionFactory @Inject()(protected val appConfig: AppConf
 
   lazy val definition: Definition =
     Definition(
-      scopes = scopes,
       api = APIDefinition(
         name = "Individuals Pensions Income (MTD)",
         description = "An API for providing individual pensions income data",

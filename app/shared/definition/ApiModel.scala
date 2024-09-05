@@ -17,7 +17,6 @@
 package shared.definition
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.auth.core.ConfidenceLevel
 
 case class PublishingException(message: String) extends Exception(message)
 
@@ -32,14 +31,7 @@ case class Parameter(name: String, required: Boolean = false)
 object Parameter {
   implicit val formatParameter: OFormat[Parameter] = Json.format[Parameter]
 }
-
-case class Scope(key: String, name: String, description: String, confidenceLevel: ConfidenceLevel)
-
-object Scope {
-  implicit val formatScope: OFormat[Scope] = Json.format[Scope]
-}
-
-case class Definition(scopes: Seq[Scope], api: APIDefinition)
+case class Definition(api: APIDefinition)
 
 object Definition {
   implicit val formatDefinition: OFormat[Definition] = Json.format[Definition]
