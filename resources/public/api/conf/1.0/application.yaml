@@ -4,6 +4,11 @@ info:
   version: "1.0"
   title: Individuals Pensions Income (MTD)
   description: |
+    The following endpoints are stateful in the Sandbox:
+    * Retrieve Pensions Income
+    * Create and Amend Pensions Income
+    * Delete Pensions Income
+    
     # Send fraud prevention data
     HMRC monitors transactions to help protect your customers' confidential data from criminals and fraudsters. 
     
@@ -47,10 +52,6 @@ components:
           scopes:
             write:self-assessment: Grant write access
             read:self-assessment: Grant read access
-
-tags:
-  - name: Pensions Income
-    description: Resources relating to an individual's pensions income (please note, an occupational pension is classed as pensions income and is identified by the occupationalPension property)
 
 paths:
   /individuals/pensions-income/{nino}/{taxYear}:
