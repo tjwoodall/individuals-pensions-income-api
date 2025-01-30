@@ -1,0 +1,4 @@
+
+PUT        /:nino/:taxYear                v2.createAmendPensions.CreateAmendPensionsController.createAmendPensions(nino: String, taxYear: String)
+GET        /:nino/:taxYear                v2.retrievePensions.RetrievePensionsController.handleRequest(nino: String, taxYear: String)
+DELETE     /:nino/:taxYear                v2.deletePensions.DeletePensionsController.deletePensions(nino: String, taxYear: String)

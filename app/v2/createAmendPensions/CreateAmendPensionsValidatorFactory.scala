@@ -14,26 +14,16 @@
  * limitations under the License.
  */
 
-package routing
+package v2.createAmendPensions
 
-import play.api.routing.Router
-import shared.config.AppConfig
-import shared.routing.{Version, Version1, Version2, VersionRoutingMap}
+import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import v2.createAmendPensions.def1.Def1_CreateAmendPensionsValidator
+import v2.createAmendPensions.model.request.CreateAmendPensionsRequestData
 
-import javax.inject.{Inject, Singleton}
+class CreateAmendPensionsValidatorFactory {
 
-@Singleton case class PensionsIncomeRoutingMap @Inject()(
-    appConfig: AppConfig,
-    defaultRouter: Router,
-    v1Router: v1.Routes,
-    v2Router: v2.Routes
-) extends VersionRoutingMap {
-
-  /** Routes corresponding to available versions.
-    */
-  val map: Map[Version, Router] = Map(
-    Version1 -> v1Router,
-    Version2 -> v2Router
-  )
+  def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendPensionsRequestData] =
+    new Def1_CreateAmendPensionsValidator(nino, taxYear, body)
 
 }

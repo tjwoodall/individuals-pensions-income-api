@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package v1.createAmendPensions.model.request
+package v2.createAmendPensions.model.request
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, OWrites, Reads}
 import shared.utils.JsonWritesUtil
 import utils.JsonUtils
-import v1.createAmendPensions.def1.model.request.{CreateAmendForeignPensionsItem, CreateAmendOverseasPensionContributions}
+import v2.createAmendPensions.def1.model.request.{CreateAmendForeignPensionsItem, CreateAmendOverseasPensionContributions}
 
 sealed trait CreateAmendPensionsRequestBody
 

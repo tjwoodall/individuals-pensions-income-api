@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package v1.retrievePensions.model.response
+package v2.retrievePensions.model.response
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import shared.models.domain.Timestamp
 import shared.utils.JsonWritesUtil
 import utils.JsonUtils
-import v1.retrievePensions.def1.model.response.{ForeignPensionsItem, OverseasPensionContributions}
+import v2.retrievePensions.def1.model.response.{ForeignPensionsItem, OverseasPensionContributions}
 
 sealed trait RetrievePensionsResponse
 

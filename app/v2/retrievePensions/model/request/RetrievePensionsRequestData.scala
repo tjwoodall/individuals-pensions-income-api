@@ -14,26 +14,18 @@
  * limitations under the License.
  */
 
-package routing
+package v2.retrievePensions.model.request
 
-import play.api.routing.Router
-import shared.config.AppConfig
-import shared.routing.{Version, Version1, Version2, VersionRoutingMap}
+import shared.models.domain.{Nino, TaxYear}
+import v2.retrievePensions.RetrievePensionsSchema
 
-import javax.inject.{Inject, Singleton}
+sealed trait RetrievePensionsRequestData {
+  def nino: Nino
+  def taxYear: TaxYear
 
-@Singleton case class PensionsIncomeRoutingMap @Inject()(
-    appConfig: AppConfig,
-    defaultRouter: Router,
-    v1Router: v1.Routes,
-    v2Router: v2.Routes
-) extends VersionRoutingMap {
+  val schema: RetrievePensionsSchema
+}
 
-  /** Routes corresponding to available versions.
-    */
-  val map: Map[Version, Router] = Map(
-    Version1 -> v1Router,
-    Version2 -> v2Router
-  )
-
+case class Def1_RetrievePensionsRequestData(nino: Nino, taxYear: TaxYear) extends RetrievePensionsRequestData {
+  val schema: RetrievePensionsSchema = RetrievePensionsSchema.Def1
 }
