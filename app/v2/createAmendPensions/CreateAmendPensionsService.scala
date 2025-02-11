@@ -21,6 +21,7 @@ import shared.controllers.RequestContext
 import shared.models.errors._
 import shared.services.{BaseService, ServiceOutcome}
 import v2.createAmendPensions.model.request.CreateAmendPensionsRequestData
+import v2.models.RuleOutsideAmendmentWindowError
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -38,6 +39,7 @@ class CreateAmendPensionsService @Inject() (connector: CreateAmendPensionsConnec
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+      "OUTSIDE_AMENDMENT_WINDOW"  -> RuleOutsideAmendmentWindowError,
       "INVALID_CORRELATIONID"     -> InternalError,
       "INVALID_PAYLOAD"           -> InternalError,
       "UNPROCESSABLE_ENTITY"      -> InternalError,

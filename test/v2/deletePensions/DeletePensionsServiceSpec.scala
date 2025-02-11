@@ -22,6 +22,7 @@ import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
 import v2.deletePensions.model.request.{Def1_DeletePensionsRequestData, DeletePensionsRequestData}
+import v2.models.RuleOutsideAmendmentWindowError
 
 import scala.concurrent.Future
 
@@ -70,6 +71,7 @@ class DeletePensionsServiceSpec extends ServiceSpec {
         val errors = List(
           ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
           ("INVALID_TAX_YEAR", TaxYearFormatError),
+          ("OUTSIDE_AMENDMENT_WINDOW", RuleOutsideAmendmentWindowError),
           ("INVALID_CORRELATIONID", InternalError),
           ("NO_DATA_FOUND", NotFoundError),
           ("SERVER_ERROR", InternalError),

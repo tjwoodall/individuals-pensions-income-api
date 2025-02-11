@@ -11,6 +11,7 @@ description: |
   | N/A - DEFAULT                    | Simulates success response.                                                                                                   |
   | STATEFUL                         | Performs a stateful create or update.                                                                                         |
   | REQUEST_CANNOT_BE_FULFILLED      | Simulates the scenario where the request cannot be fulfilled for various reasons other than the ones triggering other errors. |
+  | OUTSIDE_AMENDMENT_WINDOW         | Simulates the scenario where request cannot be completed as it is outside the amendment window.                               |
 
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'
@@ -61,6 +62,8 @@ responses:
             $ref: './common/errors.yaml#/components/examples/formatCountryCode'
           RULE_COUNTRY_CODE:
             $ref: './common/errors.yaml#/components/examples/ruleCountryCode'
+          RULE_OUTSIDE_AMENDMENT_WINDOW:
+            $ref: './common/errors.yaml#/components/examples/RuleOutsideAmendmentWindowError'
           FORMAT_VALUE:
             $ref: './common/errors.yaml#/components/examples/formatValue'
           FORMAT_CUSTOMER_REF:

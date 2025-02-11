@@ -32,3 +32,5 @@ object DoubleTaxationTreatyFormatError
     extends MtdError("FORMAT_DOUBLE_TAXATION_TREATY", "The provided double taxation treaty is invalid", BAD_REQUEST)
 
 object SF74RefFormatError extends MtdError("FORMAT_SF74_REF", "The provided SF74 reference is invalid", BAD_REQUEST)
+
+object RuleOutsideAmendmentWindowError extends MtdError("RULE_OUTSIDE_AMENDMENT_WINDOW", "You are outside the amendment window", BAD_REQUEST)

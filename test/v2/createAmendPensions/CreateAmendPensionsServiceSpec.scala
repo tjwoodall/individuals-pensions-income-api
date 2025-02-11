@@ -23,6 +23,7 @@ import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
 import v2.createAmendPensions.def1.model.request.{CreateAmendForeignPensionsItem, CreateAmendOverseasPensionContributions}
 import v2.createAmendPensions.model.request.{Def1_CreateAmendPensionsRequestBody, Def1_CreateAmendPensionsRequestData}
+import v2.models.RuleOutsideAmendmentWindowError
 
 import scala.concurrent.Future
 
@@ -118,6 +119,7 @@ class CreateAmendPensionsServiceSpec extends ServiceSpec {
         val errors = List(
           ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
           ("INVALID_TAX_YEAR", TaxYearFormatError),
+          ("OUTSIDE_AMENDMENT_WINDOW", RuleOutsideAmendmentWindowError),
           ("INVALID_CORRELATIONID", InternalError),
           ("INVALID_PAYLOAD", InternalError),
           ("UNPROCESSABLE_ENTITY", InternalError),
