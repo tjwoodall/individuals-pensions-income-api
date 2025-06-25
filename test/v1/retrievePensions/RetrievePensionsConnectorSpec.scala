@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package v1.retrievePensions
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear, Timestamp}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v1.retrievePensions.model.request.Def1_RetrievePensionsRequestData
 import v1.retrievePensions.model.response.Def1_RetrievePensionsResponse
 
@@ -53,9 +54,9 @@ class RetrievePensionsConnectorSpec extends ConnectorSpec {
 
         def taxYear: String = "2021-22"
 
-        val outcome = Right(ResponseWrapper(correlationId, retrievePensionsResponse))
+        val outcome: Right[Nothing, ResponseWrapper[Def1_RetrievePensionsResponse]] = Right(ResponseWrapper(correlationId, retrievePensionsResponse))
 
-        willGet(url = s"$baseUrl/income-tax/income/pensions/$nino/2021-22")
+        willGet(url = url"$baseUrl/income-tax/income/pensions/$nino/2021-22")
           .returns(Future.successful(outcome))
 
         await(connector.retrieve(request)) shouldBe outcome
@@ -65,9 +66,9 @@ class RetrievePensionsConnectorSpec extends ConnectorSpec {
 
         def taxYear: String = "2023-24"
 
-        val outcome = Right(ResponseWrapper(correlationId, retrievePensionsResponse))
+        val outcome: Right[Nothing, ResponseWrapper[Def1_RetrievePensionsResponse]] = Right(ResponseWrapper(correlationId, retrievePensionsResponse))
 
-        willGet(url = s"$baseUrl/income-tax/income/pensions/23-24/$nino")
+        willGet(url = url"$baseUrl/income-tax/income/pensions/23-24/$nino")
           .returns(Future.successful(outcome))
 
         await(connector.retrieve(request)) shouldBe outcome

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,21 @@
 
 package shared.connectors
 
+import play.api.libs.json.Json
 import shared.config.{AppConfig, DownstreamConfig, MockAppConfig}
 import shared.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
 import shared.mocks.MockHttpClient
 import shared.models.outcomes.ResponseWrapper
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, StringContextOps}
 
 import scala.concurrent.Future
 
 class BaseDownstreamConnectorSpec extends ConnectorSpec {
-  private val body        = "body"
+  private val body        = Json.toJson("body")
   private val outcome     = Right(ResponseWrapper(correlationId, Result(2)))
   private val url         = "some/url?param=value"
-  private val absoluteUrl = s"$baseUrl/$url"
+  private val absoluteUrl = url"$baseUrl/some/url?param=value"
 
   private implicit val httpReads: HttpReads[DownstreamOutcome[Result]] = mock[HttpReads[DownstreamOutcome[Result]]]
 
@@ -326,7 +328,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     import scala.language.reflectiveCalls
 
     val connector = new BaseDownstreamConnector with MockAppConfig with MockHttpClient {
-      val http: HttpClient     = mockHttpClient
+      val http: HttpClientV2   = mockHttpClient
       val appConfig: AppConfig = mockAppConfig
 
       def checkPassThroughHeaders(downstreamConfig: DownstreamConfig, additionalHeaders: Seq[(String, String)]): Seq[(String, String)] =
@@ -399,7 +401,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
   private class DesLocalTest extends MockHttpClient with MockAppConfig {
 
     val connector: BaseDownstreamConnector = new BaseDownstreamConnector {
-      val http: HttpClient     = mockHttpClient
+      val http: HttpClientV2   = mockHttpClient
       val appConfig: AppConfig = mockAppConfig
     }
 
@@ -415,7 +417,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
   private class IfsLocalTest extends MockHttpClient with MockAppConfig {
 
     val connector: BaseDownstreamConnector = new BaseDownstreamConnector {
-      val http: HttpClient     = mockHttpClient
+      val http: HttpClientV2   = mockHttpClient
       val appConfig: AppConfig = mockAppConfig
     }
 
@@ -431,7 +433,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
   private class TysIfsLocalTest extends MockHttpClient with MockAppConfig {
 
     val connector: BaseDownstreamConnector = new BaseDownstreamConnector {
-      val http: HttpClient     = mockHttpClient
+      val http: HttpClientV2   = mockHttpClient
       val appConfig: AppConfig = mockAppConfig
     }
 

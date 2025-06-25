@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.deletePensions.`def`
+package v1.deletePensions.def1
 
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
@@ -24,7 +24,6 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors._
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import support.IntegrationBaseSpec
-import v2.models.RuleOutsideAmendmentWindowError
 
 class Def1_DeletePensionsControllerISpec extends IntegrationBaseSpec {
 
@@ -32,7 +31,7 @@ class Def1_DeletePensionsControllerISpec extends IntegrationBaseSpec {
 
     val nino: String = "AA123456A"
 
-    def uri: String = s"/$nino/$taxYear"
+    private def uri: String = s"/$nino/$taxYear"
 
     def taxYear: String
 
@@ -47,7 +46,7 @@ class Def1_DeletePensionsControllerISpec extends IntegrationBaseSpec {
       setupStubs()
       buildRequest(uri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123")
         )
     }
@@ -137,7 +136,6 @@ class Def1_DeletePensionsControllerISpec extends IntegrationBaseSpec {
         val errors = Seq(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
-          (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError),
           (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
           (NOT_FOUND, "NO_DATA_FOUND", NOT_FOUND, NotFoundError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),

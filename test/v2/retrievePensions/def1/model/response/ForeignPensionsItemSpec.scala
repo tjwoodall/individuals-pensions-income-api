@@ -19,7 +19,6 @@ package v2.retrievePensions.def1.model.response
 import play.api.libs.json.{JsError, JsObject, Json}
 import shared.utils.UnitSpec
 
-
 class ForeignPensionsItemSpec extends UnitSpec {
 
   private val jsonWithOptionalFields = Json.parse(

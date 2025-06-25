@@ -83,7 +83,7 @@ class Def1_CreateAmendPensionsControllerISpec extends IntegrationBaseSpec {
 
     def mtdTaxYear: String
 
-    def uri: String = s"/$nino/$mtdTaxYear"
+    private def uri: String = s"/$nino/$mtdTaxYear"
 
     def downstreamUri: String
 

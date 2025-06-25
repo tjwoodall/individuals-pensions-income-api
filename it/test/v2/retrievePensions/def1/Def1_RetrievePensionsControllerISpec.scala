@@ -34,7 +34,7 @@ class Def1_RetrievePensionsControllerISpec extends IntegrationBaseSpec {
 
     def taxYear: String
 
-    def mtdUri: String = s"/$nino/$taxYear"
+    private def mtdUri: String = s"/$nino/$taxYear"
 
     val downstreamResponseBody: JsValue = Json.parse(
       """

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import shared.connectors.ConnectorSpec
 import shared.mocks.MockHttpClient
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v1.createAmendPensions.def1.model.request.{CreateAmendForeignPensionsItem, CreateAmendOverseasPensionContributions}
 import v1.createAmendPensions.model.request.{Def1_CreateAmendPensionsRequestBody, Def1_CreateAmendPensionsRequestData}
 
@@ -102,7 +103,7 @@ class CreateAmendPensionsConnectorSpec extends ConnectorSpec {
     "amendPensions" must {
       "return a 204 status for a success scenario" in new IfsTest with Test {
 
-        willPut(s"$baseUrl/income-tax/income/pensions/$nino/$taxYear", amendPensionsRequestBody).returns(Future.successful(outcome))
+        willPut(url"$baseUrl/income-tax/income/pensions/$nino/$taxYear", amendPensionsRequestBody).returns(Future.successful(outcome))
 
         await(connector.createAmendPensions(amendPensionsRequest(taxYear))) shouldBe outcome
       }
@@ -111,7 +112,7 @@ class CreateAmendPensionsConnectorSpec extends ConnectorSpec {
       "return a 204 status for a success scenario" in new TysIfsTest with Test {
 
         willPut(
-          s"$baseUrl/income-tax/income/pensions/23-24/$nino",
+          url"$baseUrl/income-tax/income/pensions/23-24/$nino",
           amendPensionsRequestBody
         ).returns(Future.successful(outcome))
 

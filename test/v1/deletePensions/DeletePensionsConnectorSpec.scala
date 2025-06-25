@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,9 @@ package v1.deletePensions
 
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.{InternalError, NinoFormatError}
+import shared.models.errors.{InternalError, MtdError, NinoFormatError}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v1.deletePensions.model.request.{Def1_DeletePensionsRequestData, DeletePensionsRequestData}
 
 import scala.concurrent.Future
@@ -49,11 +50,11 @@ class DeletePensionsConnectorSpec extends ConnectorSpec {
   "DeletePensionsIncomeConnector" should {
     "return the expected response for a non-TYS request" when {
       "a valid request is made" in new IfsTest with Test {
-        def taxYear: TaxYear = TaxYear.fromMtd("2021-22")
-        val outcome          = Right(ResponseWrapper(correlationId, ()))
+        def taxYear: TaxYear                               = TaxYear.fromMtd("2021-22")
+        val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
         willDelete(
-          url = s"$baseUrl/income-tax/income/pensions/$nino/${taxYear.asMtd}"
+          url = url"$baseUrl/income-tax/income/pensions/$nino/${taxYear.asMtd}"
         ).returns(Future.successful(outcome))
 
         await(connector.deletePensionsIncome(request)) shouldBe outcome
@@ -62,10 +63,10 @@ class DeletePensionsConnectorSpec extends ConnectorSpec {
     "downstream returns a single error" in new IfsTest with Test {
       def taxYear: TaxYear = TaxYear.fromMtd("2021-22")
 
-      val outcome = Left(ResponseWrapper(correlationId, NinoFormatError))
+      val outcome: Left[ResponseWrapper[NinoFormatError.type], Nothing] = Left(ResponseWrapper(correlationId, NinoFormatError))
 
       willDelete(
-        s"$baseUrl/income-tax/income/pensions/$nino/${taxYear.asMtd}"
+        url"$baseUrl/income-tax/income/pensions/$nino/${taxYear.asMtd}"
       ).returns(Future.successful(outcome))
 
       await(connector.deletePensionsIncome(request)) shouldBe outcome
@@ -75,10 +76,10 @@ class DeletePensionsConnectorSpec extends ConnectorSpec {
 
       def taxYear: TaxYear = TaxYear.fromMtd("2021-22")
 
-      val outcome = Left(ResponseWrapper(correlationId, Seq(NinoFormatError, InternalError)))
+      val outcome: Left[ResponseWrapper[Seq[MtdError]], Nothing] = Left(ResponseWrapper(correlationId, Seq(NinoFormatError, InternalError)))
 
       willDelete(
-        s"$baseUrl/income-tax/income/pensions/$nino/${taxYear.asMtd}"
+        url"$baseUrl/income-tax/income/pensions/$nino/${taxYear.asMtd}"
       ).returns(Future.successful(outcome))
 
       await(connector.deletePensionsIncome(request)) shouldBe outcome
@@ -88,11 +89,11 @@ class DeletePensionsConnectorSpec extends ConnectorSpec {
 
   "return the expected response for a TYS request" when {
     "a valid request is made" in new TysIfsTest with Test {
-      def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-      val outcome          = Right(ResponseWrapper(correlationId, ()))
+      def taxYear: TaxYear                               = TaxYear.fromMtd("2023-24")
+      val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
       willDelete(
-        url = s"$baseUrl/income-tax/income/pensions/${taxYear.asTysDownstream}/$nino"
+        url = url"$baseUrl/income-tax/income/pensions/${taxYear.asTysDownstream}/$nino"
       ).returns(Future.successful(outcome))
 
       await(connector.deletePensionsIncome(request)) shouldBe outcome

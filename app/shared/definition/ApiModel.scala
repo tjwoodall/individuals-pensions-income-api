@@ -31,6 +31,7 @@ case class Parameter(name: String, required: Boolean = false)
 object Parameter {
   implicit val formatParameter: OFormat[Parameter] = Json.format[Parameter]
 }
+
 case class Definition(api: APIDefinition)
 
 object Definition {

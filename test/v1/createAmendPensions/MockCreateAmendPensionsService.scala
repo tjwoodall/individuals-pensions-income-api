@@ -18,13 +18,14 @@ package v1.createAmendPensions
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.controllers.RequestContext
 import shared.services.ServiceOutcome
 import v1.createAmendPensions.model.request.CreateAmendPensionsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAmendPensionsService extends MockFactory {
+trait MockCreateAmendPensionsService extends TestSuite with MockFactory {
 
   val mockCreateAmendPensionsService: CreateAmendPensionsService = mock[CreateAmendPensionsService]
 

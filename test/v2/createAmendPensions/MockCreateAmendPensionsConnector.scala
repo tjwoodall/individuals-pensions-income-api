@@ -18,13 +18,14 @@ package v2.createAmendPensions
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.createAmendPensions.model.request.CreateAmendPensionsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAmendPensionsConnector extends MockFactory {
+trait MockCreateAmendPensionsConnector extends TestSuite with MockFactory {
 
   val mockCreateAmendPensionsConnector: CreateAmendPensionsConnector = mock[CreateAmendPensionsConnector]
 

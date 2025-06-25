@@ -35,7 +35,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.Future
 
 abstract class ControllerBaseSpec
-  extends UnitSpec
+    extends UnitSpec
     with Status
     with MimeTypes
     with HeaderNames

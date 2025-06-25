@@ -43,24 +43,24 @@ class DeletePensionsController @Inject() (val authService: EnrolmentsAuthService
       controllerName = "DeletePensionsController",
       endpointName = "deletePensions"
     )
-  def deletePensions(nino: String, taxYear: String): Action[AnyContent] =
-  authorisedAction(nino).async { implicit request =>
-    implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-    val validator = validatorFactory.validator(nino, taxYear)
+  def deletePensions(nino: String, taxYear: String): Action[AnyContent] =
+    authorisedAction(nino).async { implicit request =>
+      implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
+
+      val validator = validatorFactory.validator(nino, taxYear)
 
       val requestHandler = RequestHandler
         .withValidator(validator)
         .withService(service.deletePensions)
         .withNoContentResult()
-        .withAuditing(
-          AuditHandler(
-            auditService,
-            auditType = "DeletePensionsIncome",
-            apiVersion = Version(request),
-            transactionName = "delete-pensions-income",
-            params = Map("nino" -> nino, "taxYear" -> taxYear)
-          ))
+        .withAuditing(AuditHandler(
+          auditService,
+          auditType = "DeletePensionsIncome",
+          apiVersion = Version(request),
+          transactionName = "delete-pensions-income",
+          params = Map("nino" -> nino, "taxYear" -> taxYear)
+        ))
       requestHandler.handleRequest()
     }
 

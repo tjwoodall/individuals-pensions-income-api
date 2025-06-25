@@ -23,7 +23,7 @@ import shared.routing.{Version1, Version2}
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class PensionsIncomeDefinitionFactory @Inject()(protected val appConfig: AppConfig) extends ApiDefinitionFactory {
+class PensionsIncomeDefinitionFactory @Inject() (protected val appConfig: AppConfig) extends ApiDefinitionFactory {
 
   lazy val definition: Definition =
     Definition(

@@ -26,8 +26,8 @@ import shared.models.errors.MtdError
 import v1.createAmendPensions.def1.Def1_CreateAmendPensionsRulesValidator.validateBusinessRules
 import v1.createAmendPensions.def1.Def1_CreateAmendPensionsValidator.{resolveJson, resolveTaxYear}
 import v1.createAmendPensions.model.request.{CreateAmendPensionsRequestData, Def1_CreateAmendPensionsRequestBody, Def1_CreateAmendPensionsRequestData}
-class Def1_CreateAmendPensionsValidator(nino: String, taxYear: String, body: JsValue)
-    extends Validator[CreateAmendPensionsRequestData] {
+
+class Def1_CreateAmendPensionsValidator(nino: String, taxYear: String, body: JsValue) extends Validator[CreateAmendPensionsRequestData] {
 
   def validate: Validated[Seq[MtdError], CreateAmendPensionsRequestData] =
     (
@@ -38,7 +38,7 @@ class Def1_CreateAmendPensionsValidator(nino: String, taxYear: String, body: JsV
 
 }
 
-object Def1_CreateAmendPensionsValidator{
+object Def1_CreateAmendPensionsValidator {
   private val resolveJson         = new ResolveNonEmptyJsonObject[Def1_CreateAmendPensionsRequestBody]()
   private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(2020))
 }

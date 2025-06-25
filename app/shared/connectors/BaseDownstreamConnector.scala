@@ -17,16 +17,17 @@
 package shared.connectors
 
 import play.api.http.{HeaderNames, MimeTypes}
-import play.api.libs.json.Writes
+import play.api.libs.json.{Json, Writes}
 import shared.config.{AppConfig, DownstreamConfig}
 import shared.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
-import shared.utils.Logging
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
+import shared.utils.{Logging, UrlUtils}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, StringContextOps}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 trait BaseDownstreamConnector extends Logging {
-  val http: HttpClient
+  val http: HttpClientV2
   val appConfig: AppConfig
 
   private val jsonContentTypeHeader = HeaderNames.CONTENT_TYPE -> MimeTypes.JSON
@@ -38,7 +39,8 @@ trait BaseDownstreamConnector extends Logging {
       correlationId: String): Future[DownstreamOutcome[Resp]] = {
 
     def doPost(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] = {
-      http.POST(getBackendUri(uri), body)
+      http.post(url"${getBackendUri(uri)}").withBody(Json.toJson(body)).execute[DownstreamOutcome[Resp]]
+
     }
 
     doPost(getBackendHeaders(uri, jsonContentTypeHeader))
@@ -50,9 +52,9 @@ trait BaseDownstreamConnector extends Logging {
       httpReads: HttpReads[DownstreamOutcome[Resp]],
       correlationId: String): Future[DownstreamOutcome[Resp]] = {
 
-    def doGet(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] =
-      http.GET(getBackendUri(uri))
-
+    def doGet(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] = {
+      http.get(url"${getBackendUri(uri)}").execute
+    }
     doGet(getBackendHeaders(uri))
   }
 
@@ -62,9 +64,10 @@ trait BaseDownstreamConnector extends Logging {
       httpReads: HttpReads[DownstreamOutcome[Resp]],
       correlationId: String): Future[DownstreamOutcome[Resp]] = {
 
-    def doGet(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] =
-      http.GET(getBackendUri(uri), queryParams)
-
+    def doGet(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] = {
+      val fullUrl = UrlUtils.appendQueryParams(getBackendUri(uri), queryParams)
+      http.get(url"$fullUrl").execute
+    }
     doGet(getBackendHeaders(uri))
   }
 
@@ -75,9 +78,8 @@ trait BaseDownstreamConnector extends Logging {
       correlationId: String): Future[DownstreamOutcome[Resp]] = {
 
     def doDelete(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] = {
-      http.DELETE(getBackendUri(uri))
+      http.delete(url"${getBackendUri(uri)}").execute
     }
-
     doDelete(getBackendHeaders(uri))
   }
 
@@ -88,7 +90,8 @@ trait BaseDownstreamConnector extends Logging {
       correlationId: String): Future[DownstreamOutcome[Resp]] = {
 
     def doPut(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] = {
-      http.PUT(getBackendUri(uri), body)
+      http.put(url"${getBackendUri(uri)}").withBody(Json.toJson(body)).execute
+
     }
 
     maybeIntent match {

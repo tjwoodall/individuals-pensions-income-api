@@ -22,7 +22,7 @@ import shared.routing.{Version, Version1, Version2, VersionRoutingMap}
 
 import javax.inject.{Inject, Singleton}
 
-@Singleton case class PensionsIncomeRoutingMap @Inject()(
+@Singleton case class PensionsIncomeRoutingMap @Inject() (
     appConfig: AppConfig,
     defaultRouter: Router,
     v1Router: v1.Routes,

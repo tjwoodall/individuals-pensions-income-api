@@ -17,8 +17,9 @@
 package config
 
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 
-trait MockPensionsIncomeConfig extends MockFactory {
+trait MockPensionsIncomeConfig extends TestSuite with MockFactory {
 
   implicit val mockPensionsIncomeConfig: PensionsIncomeConfig = mock[PensionsIncomeConfig]
 
