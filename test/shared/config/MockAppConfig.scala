@@ -48,14 +48,6 @@ trait MockAppConfig extends TestSuite with MockFactory {
     def ifsEnvironmentHeaders: CallHandler0[Option[Seq[String]]] = (() => mockAppConfig.ifsEnvironmentHeaders: Option[Seq[String]]).expects()
     def ifsDownstreamConfig: CallHandler0[DownstreamConfig]      = (() => mockAppConfig.ifsDownstreamConfig: DownstreamConfig).expects()
 
-    // TYS IFS Config
-    def tysIfsBaseUrl: CallHandler0[String]                         = (() => mockAppConfig.tysIfsBaseUrl: String).expects()
-    def tysIfsToken: CallHandler0[String]                           = (() => mockAppConfig.tysIfsToken: String).expects()
-    def tysIfsEnv: CallHandler0[String]                             = (() => mockAppConfig.tysIfsEnv: String).expects()
-    def tysIfsEnvironment: CallHandler0[String]                     = (() => mockAppConfig.tysIfsEnv: String).expects()
-    def tysIfsEnvironmentHeaders: CallHandler0[Option[Seq[String]]] = (() => mockAppConfig.tysIfsEnvironmentHeaders: Option[Seq[String]]).expects()
-    def tysIfsDownstreamConfig: CallHandler0[DownstreamConfig]      = (() => mockAppConfig.tysIfsDownstreamConfig: DownstreamConfig).expects()
-
     // API Config
     def featureSwitchConfig: CallHandler0[Configuration]         = (() => mockAppConfig.featureSwitchConfig: Configuration).expects()
     def apiGatewayContext: CallHandler0[String]                  = (() => mockAppConfig.apiGatewayContext: String).expects()

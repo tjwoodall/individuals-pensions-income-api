@@ -62,7 +62,7 @@ class RetrievePensionsConnectorSpec extends ConnectorSpec {
         await(connector.retrieve(request)) shouldBe outcome
       }
 
-      "return a 200 status for a success scenario for a TYS tax year" in new TysIfsTest with Test {
+      "return a 200 status for a success scenario for a TYS tax year" in new IfsTest with Test {
 
         def taxYear: String = "2023-24"
 

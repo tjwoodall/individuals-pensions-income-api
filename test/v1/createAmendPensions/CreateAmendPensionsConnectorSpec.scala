@@ -109,7 +109,7 @@ class CreateAmendPensionsConnectorSpec extends ConnectorSpec {
       }
     }
     "amend pensions for a TYS tax year" must {
-      "return a 204 status for a success scenario" in new TysIfsTest with Test {
+      "return a 204 status for a success scenario" in new IfsTest  with Test {
 
         willPut(
           url"$baseUrl/income-tax/income/pensions/23-24/$nino",

@@ -82,26 +82,6 @@ class AppConfigSpec extends UnitSpec {
         expectedIfsEnvHeaders
       )
     }
-
-    "return the TYS-IFS config" in {
-      val expectedTysIfsEnvHeaders = Some(
-        List(
-          "TYS-IFS-Accept",
-          "TYS-IFS-Gov-Test-Scenario",
-          "TYS-IFS-Content-Type"
-        ))
-
-      simpleAppConfig.tysIfsBaseUrl shouldBe "http://127.0.0.1:8888"
-      simpleAppConfig.tysIfsEnv shouldBe "Prod"
-      simpleAppConfig.tysIfsToken shouldBe "TYS-IFS-ABCD1234"
-      simpleAppConfig.tysIfsEnvironmentHeaders shouldBe expectedTysIfsEnvHeaders
-      simpleAppConfig.tysIfsDownstreamConfig shouldBe DownstreamConfig(
-        "http://127.0.0.1:8888",
-        "Prod",
-        "TYS-IFS-ABCD1234",
-        expectedTysIfsEnvHeaders
-      )
-    }
   }
 
   "endpointsEnabled" when {
@@ -358,14 +338,6 @@ class AppConfigSpec extends UnitSpec {
           |        env = Prod
           |        token = IFS-ABCD1234
           |        environmentHeaders = ["IFS-Accept", "IFS-Gov-Test-Scenario", "IFS-Content-Type"]
-          |      }
-          |
-          |      tys-ifs {
-          |        host = 127.0.0.1
-          |        port = 8888
-          |        env = Prod
-          |        token = TYS-IFS-ABCD1234
-          |        environmentHeaders = ["TYS-IFS-Accept", "TYS-IFS-Gov-Test-Scenario", "TYS-IFS-Content-Type"]
           |      }
           |    }
           |  }

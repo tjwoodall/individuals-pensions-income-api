@@ -19,7 +19,7 @@ package shared.connectors
 import play.api.http.{HeaderNames, MimeTypes}
 import play.api.libs.json.{Json, Writes}
 import shared.config.{AppConfig, DownstreamConfig}
-import shared.connectors.DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.{DesUri, IfsUri}
 import shared.utils.{Logging, UrlUtils}
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, StringContextOps}
@@ -144,7 +144,6 @@ trait BaseDownstreamConnector extends Logging {
     uri match {
       case DesUri(_)                => appConfig.desDownstreamConfig
       case IfsUri(_)                => appConfig.ifsDownstreamConfig
-      case TaxYearSpecificIfsUri(_) => appConfig.tysIfsDownstreamConfig
     }
 
   private def intentHeader(maybeIntent: String): (String, String) = "intent" -> maybeIntent

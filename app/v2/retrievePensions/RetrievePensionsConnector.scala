@@ -17,11 +17,11 @@
 package v2.retrievePensions
 
 import shared.config.AppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.client.HttpClientV2
 import v2.retrievePensions.model.request.RetrievePensionsRequestData
 import v2.retrievePensions.model.response.RetrievePensionsResponse
 
@@ -40,7 +40,7 @@ class RetrievePensionsConnector @Inject() (val http: HttpClientV2, val appConfig
     import schema._
 
     val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-      TaxYearSpecificIfsUri[DownstreamResp](s"income-tax/income/pensions/${taxYear.asTysDownstream}/${nino.value}")
+      IfsUri[DownstreamResp](s"income-tax/income/pensions/${taxYear.asTysDownstream}/${nino.value}")
     } else {
       IfsUri[DownstreamResp](s"income-tax/income/pensions/${nino.value}/${taxYear.asMtd}")
     }

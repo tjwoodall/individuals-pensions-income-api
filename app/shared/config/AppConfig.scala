@@ -57,15 +57,6 @@ class AppConfig @Inject() (config: ServicesConfig, protected[config] val configu
   def ifsDownstreamConfig: DownstreamConfig =
     DownstreamConfig(baseUrl = ifsBaseUrl, env = ifsEnv, token = ifsToken, environmentHeaders = ifsEnvironmentHeaders)
 
-  // Tax Year Specific (TYS) IFS Config
-  def tysIfsBaseUrl: String                         = config.baseUrl("tys-ifs")
-  def tysIfsEnv: String                             = config.getString("microservice.services.tys-ifs.env")
-  def tysIfsToken: String                           = config.getString("microservice.services.tys-ifs.token")
-  def tysIfsEnvironmentHeaders: Option[Seq[String]] = configuration.getOptional[Seq[String]]("microservice.services.tys-ifs.environmentHeaders")
-
-  def tysIfsDownstreamConfig: DownstreamConfig =
-    DownstreamConfig(baseUrl = tysIfsBaseUrl, env = tysIfsEnv, token = tysIfsToken, environmentHeaders = tysIfsEnvironmentHeaders)
-
   // API Config
   def apiGatewayContext: String                    = config.getString("api.gateway.context")
   def confidenceLevelConfig: ConfidenceLevelConfig = configuration.get[ConfidenceLevelConfig](s"api.confidence-level-check")

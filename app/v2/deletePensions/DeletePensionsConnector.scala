@@ -17,11 +17,11 @@
 package v2.deletePensions
 
 import shared.config.AppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.client.HttpClientV2
 import v2.deletePensions.model.request.DeletePensionsRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -38,7 +38,7 @@ class DeletePensionsConnector @Inject() (val http: HttpClientV2, val appConfig: 
     import request._
 
     val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-      TaxYearSpecificIfsUri[Unit](
+      IfsUri[Unit](
         s"income-tax/income/pensions/${taxYear.asTysDownstream}/$nino"
       )
     } else {
