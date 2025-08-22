@@ -24,7 +24,7 @@ import shared.config.MockAppConfig
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import v2.deletePensions.model.request.{Def1_DeletePensionsRequestData, DeletePensionsRequestData}
 
@@ -81,7 +81,7 @@ class DeletePensionsControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new DeletePensionsController(
+    val controller: DeletePensionsController = new DeletePensionsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockDeletePensionsValidatorFactory,

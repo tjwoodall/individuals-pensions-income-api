@@ -19,7 +19,7 @@ package v2.createAmendPensions
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import shared.config.AppConfig
-import shared.controllers._
+import shared.controllers.*
 import shared.routing.Version2
 import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import shared.utils.IdGenerator

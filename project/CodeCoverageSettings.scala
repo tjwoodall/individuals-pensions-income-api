@@ -36,7 +36,8 @@ object CodeCoverageSettings {
     ".*Routes.*",
     "config.*",
     "testOnly.*",
-    "testOnlyDoNotUseInAppConf.*"
+    "testOnlyDoNotUseInAppConf.*",
+    ".*\\$anon.*"
   )
 
 }

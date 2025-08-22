@@ -19,7 +19,7 @@ package v2.retrievePensions
 import play.api.libs.json.{Format, Json}
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear, Timestamp}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
 import v2.retrievePensions.model.request.Def1_RetrievePensionsRequestData
@@ -94,7 +94,7 @@ class RetrievePensionsServiceSpec extends ServiceSpec {
           ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceError.tupled(args))
       }
     }
 

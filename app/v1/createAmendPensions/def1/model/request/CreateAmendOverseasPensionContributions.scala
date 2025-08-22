@@ -16,7 +16,7 @@
 
 package v1.createAmendPensions.def1.model.request
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class CreateAmendOverseasPensionContributions(customerReference: Option[String],
@@ -40,6 +40,6 @@ object CreateAmendOverseasPensionContributions {
       (JsPath \ "dblTaxationArticle").writeNullable[String] and
       (JsPath \ "dblTaxationTreaty").writeNullable[String] and
       (JsPath \ "sf74Reference").writeNullable[String]
-  )(unlift(CreateAmendOverseasPensionContributions.unapply))
+  )(w => Tuple.fromProductTyped(w))
 
 }

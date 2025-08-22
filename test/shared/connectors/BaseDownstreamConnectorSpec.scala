@@ -24,7 +24,9 @@ import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, StringContextOps}
 
+import scala.reflect.Selectable.reflectiveSelectable
 import scala.concurrent.Future
+import scala.language.reflectiveCalls
 
 class BaseDownstreamConnectorSpec extends ConnectorSpec {
   private val body        = Json.toJson("body")
@@ -228,15 +230,16 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
   }
 
   "passThroughHeaders()" when {
-    import scala.language.reflectiveCalls
 
-    val connector = new BaseDownstreamConnector with MockAppConfig with MockHttpClient {
-      val http: HttpClientV2   = mockHttpClient
-      val appConfig: AppConfig = mockAppConfig
+    val connector
+        : { def checkPassThroughHeaders(downstreamConfig: DownstreamConfig, additionalHeaders: Seq[(String, String)]): Seq[(String, String)] } =
+      new BaseDownstreamConnector with MockAppConfig with MockHttpClient {
+        val http: HttpClientV2   = mockHttpClient
+        val appConfig: AppConfig = mockAppConfig
 
-      def checkPassThroughHeaders(downstreamConfig: DownstreamConfig, additionalHeaders: Seq[(String, String)]): Seq[(String, String)] =
-        passThroughHeaders(downstreamConfig, additionalHeaders)
-    }
+        def checkPassThroughHeaders(downstreamConfig: DownstreamConfig, additionalHeaders: Seq[(String, String)]): Seq[(String, String)] =
+          passThroughHeaders(downstreamConfig, additionalHeaders)
+      }
 
     "given some environmentHeaders and additionalHeaders" should {
 

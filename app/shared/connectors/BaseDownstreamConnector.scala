@@ -17,7 +17,8 @@
 package shared.connectors
 
 import play.api.http.{HeaderNames, MimeTypes}
-import play.api.libs.json.{Json, Writes}
+import play.api.libs.json.*
+import play.api.libs.ws.*
 import shared.config.{AppConfig, DownstreamConfig}
 import shared.connectors.DownstreamUri.{DesUri, IfsUri}
 import shared.utils.{Logging, UrlUtils}
@@ -142,8 +143,8 @@ trait BaseDownstreamConnector extends Logging {
 
   private def configFor[Resp](uri: DownstreamUri[Resp]) =
     uri match {
-      case DesUri(_)                => appConfig.desDownstreamConfig
-      case IfsUri(_)                => appConfig.ifsDownstreamConfig
+      case DesUri(_) => appConfig.desDownstreamConfig
+      case IfsUri(_) => appConfig.ifsDownstreamConfig
     }
 
   private def intentHeader(maybeIntent: String): (String, String) = "intent" -> maybeIntent

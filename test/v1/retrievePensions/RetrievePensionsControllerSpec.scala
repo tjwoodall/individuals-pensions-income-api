@@ -21,7 +21,7 @@ import play.api.mvc.Result
 import shared.config.MockAppConfig
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.domain.{Nino, TaxYear, Timestamp}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import v1.retrievePensions.def1.model.RetrievePensionsControllerFixture
 import v1.retrievePensions.def1.model.response.{ForeignPensionsItem, OverseasPensionContributions}
@@ -129,7 +129,7 @@ class RetrievePensionsControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrievePensionsController(
+    val controller: RetrievePensionsController = new RetrievePensionsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrievePensionsValidatorFactory,

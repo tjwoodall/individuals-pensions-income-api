@@ -16,7 +16,7 @@
 
 package v1.retrievePensions.def1.model.response
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class OverseasPensionContributions(customerReference: Option[String],
@@ -39,7 +39,7 @@ object OverseasPensionContributions {
       (JsPath \ "dblTaxationArticle").readNullable[String] and
       (JsPath \ "dblTaxationTreaty").readNullable[String] and
       (JsPath \ "sf74Reference").readNullable[String]
-  )(OverseasPensionContributions.apply _)
+  )(OverseasPensionContributions.apply)
 
   implicit val writes: OWrites[OverseasPensionContributions] = Json.writes[OverseasPensionContributions]
 }

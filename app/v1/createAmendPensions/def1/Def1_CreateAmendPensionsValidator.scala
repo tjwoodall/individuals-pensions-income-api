@@ -17,7 +17,7 @@
 package v1.createAmendPensions.def1
 
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinimum}
@@ -34,7 +34,7 @@ class Def1_CreateAmendPensionsValidator(nino: String, taxYear: String, body: JsV
       ResolveNino(nino),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateAmendPensionsRequestData) andThen validateBusinessRules
+    ).mapN(Def1_CreateAmendPensionsRequestData.apply) andThen validateBusinessRules
 
 }
 

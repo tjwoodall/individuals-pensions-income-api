@@ -24,7 +24,7 @@ import shared.controllers.validators.resolvers.{ResolveParsedCountryCode, Resolv
 import shared.models.errors.MtdError
 import v2.createAmendPensions.def1.model.request.{CreateAmendForeignPensionsItem, CreateAmendOverseasPensionContributions}
 import v2.createAmendPensions.model.request.Def1_CreateAmendPensionsRequestData
-import v2.models._
+import v2.models.*
 
 object Def1_CreateAmendPensionsRulesValidator extends RulesValidator[Def1_CreateAmendPensionsRequestData] {
 
@@ -32,7 +32,7 @@ object Def1_CreateAmendPensionsRulesValidator extends RulesValidator[Def1_Create
   private val stringRegex         = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$".r
 
   def validateBusinessRules(parsed: Def1_CreateAmendPensionsRequestData): Validated[Seq[MtdError], Def1_CreateAmendPensionsRequestData] = {
-    import parsed.body._
+    import parsed.body.*
     val validatedForeignPensions = foreignPensions match {
       case Some(foreignPensionsItems) =>
         val foreignPensionsWithIndex = foreignPensionsItems.zipWithIndex.toList

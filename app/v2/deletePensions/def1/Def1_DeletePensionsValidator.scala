@@ -17,7 +17,7 @@
 package v2.deletePensions.def1
 
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
 import shared.models.domain.TaxYear
@@ -30,7 +30,7 @@ class Def1_DeletePensionsValidator(nino: String, taxYear: String) extends Valida
   def validate: Validated[Seq[MtdError], DeletePensionsRequestData] = (
     ResolveNino(nino),
     resolveTaxYear(taxYear)
-  ).mapN(Def1_DeletePensionsRequestData)
+  ).mapN(Def1_DeletePensionsRequestData.apply)
 
 }
 

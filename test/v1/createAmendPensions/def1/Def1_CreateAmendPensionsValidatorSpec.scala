@@ -20,11 +20,11 @@ import play.api.libs.json.{JsObject, JsValue, Json}
 import shared.utils.UnitSpec
 import shared.config.MockAppConfig
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import v1.createAmendPensions.def1.model.request.{CreateAmendForeignPensionsItem, CreateAmendOverseasPensionContributions}
 import v1.createAmendPensions.model.request.{CreateAmendPensionsRequestData, Def1_CreateAmendPensionsRequestBody, Def1_CreateAmendPensionsRequestData}
-import v1.models._
+import v1.models.*
 
 class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
 

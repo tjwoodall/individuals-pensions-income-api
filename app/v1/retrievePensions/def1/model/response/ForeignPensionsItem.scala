@@ -16,7 +16,7 @@
 
 package v1.retrievePensions.def1.model.response
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class ForeignPensionsItem(countryCode: String,
@@ -35,7 +35,7 @@ object ForeignPensionsItem {
       (JsPath \ "specialWithholdingTax").readNullable[BigDecimal] and
       (JsPath \ "foreignTaxCreditRelief").readNullable[Boolean] and
       (JsPath \ "taxableAmount").read[BigDecimal]
-  )(ForeignPensionsItem.apply _)
+  )(ForeignPensionsItem.apply)
 
   implicit val writes: OWrites[ForeignPensionsItem] = Json.writes[ForeignPensionsItem]
 }

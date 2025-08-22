@@ -24,12 +24,12 @@ import play.api.libs.ws.WSResponse
 import shared.config.AppConfig
 import shared.routing.{Version, Versions}
 import support.IntegrationBaseSpec
-
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
 import scala.util.Try
 
 class DocumentationControllerISpec extends IntegrationBaseSpec {
 
-  private val config          = app.injector.instanceOf[AppConfig]
+  private val config = app.injector.instanceOf[AppConfig]
 
   private lazy val enabledVersions: Seq[Version] =
     (1 to 99).collect {

@@ -16,7 +16,7 @@
 
 package shared.controllers
 
-import cats.syntax.either._
+import cats.syntax.either.*
 import play.api.libs.json.{JsValue, Writes}
 import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.auth.UserDetails
@@ -52,24 +52,6 @@ object AuditHandler {
       requestBody = requestBody,
       responseBodyMap = if (includeResponse) identity else const(None)
     )
-
-  def custom[A: Writes](auditService: AuditService,
-                        auditType: String,
-                        transactionName: String,
-                        auditDetailCreator: AuditDetailCreator[A],
-                        requestBody: Option[JsValue] = None,
-                        responseBodyMap: Option[JsValue] => Option[JsValue]): AuditHandler = {
-    // $COVERAGE-OFF$
-    new AuditHandlerImpl[A](
-      auditService = auditService,
-      auditType = auditType,
-      transactionName = transactionName,
-      auditDetailCreator,
-      requestBody = requestBody,
-      responseBodyMap = responseBodyMap
-    )
-    // $COVERAGE-ON$
-  }
 
   trait AuditDetailCreator[A] {
     def createAuditDetail(userDetails: UserDetails, requestBody: Option[JsValue], auditResponse: AuditResponse)(implicit ctx: RequestContext): A

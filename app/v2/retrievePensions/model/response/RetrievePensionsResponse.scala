@@ -16,7 +16,7 @@
 
 package v2.retrievePensions.model.response
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import shared.models.domain.Timestamp
 import shared.utils.JsonWritesUtil
@@ -44,7 +44,7 @@ object Def1_RetrievePensionsResponse extends JsonUtils {
     (JsPath \ "submittedOn").read[Timestamp] and
       (JsPath \ "foreignPension").readNullable[Seq[ForeignPensionsItem]].mapEmptySeqToNone and
       (JsPath \ "overseasPensionContribution").readNullable[Seq[OverseasPensionContributions]].mapEmptySeqToNone
-  )(Def1_RetrievePensionsResponse.apply _)
+  )(Def1_RetrievePensionsResponse.apply)
 
   implicit val writes: OWrites[Def1_RetrievePensionsResponse] = Json.writes[Def1_RetrievePensionsResponse]
 

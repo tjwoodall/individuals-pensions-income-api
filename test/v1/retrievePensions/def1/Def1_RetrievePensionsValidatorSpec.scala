@@ -19,7 +19,7 @@ package v1.retrievePensions.def1
 import shared.utils.UnitSpec
 import shared.config.{AppConfig, MockAppConfig}
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import v1.retrievePensions.model.request.Def1_RetrievePensionsRequestData
 
 class Def1_RetrievePensionsValidatorSpec extends UnitSpec with MockAppConfig {

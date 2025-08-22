@@ -16,9 +16,9 @@
 
 package v2.deletePensions
 
-import cats.implicits._
+import cats.implicits.*
 import shared.controllers.RequestContext
-import shared.models.errors._
+import shared.models.errors.*
 import shared.services.{BaseService, ServiceOutcome}
 import v2.deletePensions.model.request.DeletePensionsRequestData
 import v2.models.RuleOutsideAmendmentWindowError
