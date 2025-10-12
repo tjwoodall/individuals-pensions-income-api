@@ -44,7 +44,7 @@
           "foreignTaxCreditRelief": {
             "type": "boolean",
             "description": "A boolean indicating whether Foreign Tax Credit Relief (FTCR) has been claimed.",
-            "example": "false"
+            "example": false
           },
           "taxableAmount": {
             "type": "number",
