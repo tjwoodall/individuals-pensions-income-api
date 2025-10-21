@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ object Def1_CreateAmendPensionsRulesValidator extends RulesValidator[Def1_Create
   }
 
   private def resolveNonNegativeNumber(value: Option[BigDecimal], path: String): Validated[Seq[MtdError], Option[BigDecimal]] =
-    ResolveParsedNumber(disallowZero = true)(value, path)
+    ResolveParsedNumber()(value, path)
 
   private def validateCustomerRef(ref: String, path: String, error: MtdError = CustomerRefFormatError): Validated[Seq[MtdError], Unit] =
     if (stringRegex.matches(ref)) valid
