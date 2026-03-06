@@ -131,6 +131,25 @@ class AppConfigSpec extends UnitSpec {
     }
   }
 
+  "allowRequestCannotBeFulfilledHeader" when {
+    "the API version allows request cannot be fulfilled header" should {
+      "return true" in {
+        val appConfigWithAllowRequestCannotBeFulfilledHeader = appConfig(
+          """
+            |    6.0 {
+            |      endpoints {
+            |        allow-request-cannot-be-fulfilled-header = true
+            |      }
+            |    }
+            |""".stripMargin
+        )
+
+        val result = appConfigWithAllowRequestCannotBeFulfilledHeader.allowRequestCannotBeFulfilledHeader(Version6)
+        result shouldBe true
+      }
+    }
+  }
+
   "endpointReleasedInProduction" when {
     "the API version is enabled and the config specifies the endpoint status as true" should {
       "return true" in {
@@ -388,9 +407,9 @@ class AppConfigSpec extends UnitSpec {
     }
   }
 
-  private def appConfig(versionConf: String): AppConfig = {
+  private def appConfig(versionConf: String, apiDocumentationUrl: Option[String] = None): AppConfig = {
     val conf = ConfigFactory.parseString(
-      """
+      s"""
         |  appName = "any-name-api"
         |  appUrl = "http://localhost:9999"
         |  
@@ -399,7 +418,11 @@ class AppConfigSpec extends UnitSpec {
 
         versionConf ++
 
-        """
+        s"""
+           |${apiDocumentationUrl match {
+            case Some(url) => s"documentation-url = $url"
+            case _         => ""
+          }}
           |  }
           |  
           |  microservice {
