@@ -41,10 +41,10 @@ servers:
 paths:
   /individuals/pensions-income/{nino}/{taxYear}:
     get:
-      summary: Retrieve Pensions Income
       security:
         - User-Restricted:
             - read:self-assessment
+      summary: Retrieve Pensions Income
       description: |
         This endpoint allows the developer to retrieve foreign pensions and overseas pension contributions. 
         A National Insurance number and tax year must be provided.
@@ -229,23 +229,7 @@ paths:
                 default:
                   description: Full Pensions Income
                   value:
-                    submittedOn: '2021-04-06T09:37:17.000Z'
-                    foreignPensions:
-                      - countryCode: FRA
-                        amountBeforeTax: 1999.99
-                        taxTakenOff: 1999.99
-                        specialWithholdingTax: 1999.99
-                        foreignTaxCreditRelief: false
-                        taxableAmount: 1999.99
-                    overseasPensionContributions:
-                      - customerReference: PENSIONINCOME245
-                        exemptEmployersPensionContribs: 1999.99
-                        migrantMemReliefQopsRefNo: QOPS000000
-                        dblTaxationRelief: 1999.99
-                        dblTaxationCountryCode: FRA
-                        dblTaxationArticle: AB3211-1
-                        dblTaxationTreaty: MUNICH
-                        sf74reference: SF74-123456
+                    $ref: ./examples/retrieve_response.json
         '400':
           description: Bad request
           headers:
@@ -374,10 +358,10 @@ paths:
                     code: RULE_REQUEST_CANNOT_BE_FULFILLED
                     message: Custom (will vary in production depending on the actual error)
     put:
-      summary: Create and Amend Pensions Income
       security:
         - User-Restricted:
             - write:self-assessment
+      summary: Create and Amend Pensions Income
       description: |
         This endpoint enables you to create and amend foreign pensions and overseas pension contributions. 
         A National Insurance number and tax year must be provided.
@@ -454,22 +438,7 @@ paths:
               full_amendment:
                 description: Full Pensions Income Amendment
                 value:
-                  foreignPensions:
-                    - countryCode: FRA
-                      amountBeforeTax: 1999.99
-                      taxTakenOff: 1999.99
-                      specialWithholdingTax: 1999.99
-                      foreignTaxCreditRelief: false
-                      taxableAmount: 1999.99
-                  overseasPensionContributions:
-                    - customerReference: PENSIONINCOME245
-                      exemptEmployersPensionContribs: 1999.99
-                      migrantMemReliefQopsRefNo: QOPS000000
-                      dblTaxationRelief: 1999.99
-                      dblTaxationCountryCode: FRA
-                      dblTaxationArticle: AB3211-1
-                      dblTaxationTreaty: MUNICH
-                      sf74reference: SF74-123456
+                  $ref: ./examples/amend_request.json
       responses:
         '200':
           description: Success
@@ -615,10 +584,10 @@ paths:
                   description: The request cannot be fulfilled. More specific information is provided in the error message.
                   value: *ref_15
     delete:
-      summary: Delete Pensions Income
       security:
         - User-Restricted:
             - write:self-assessment
+      summary: Delete Pensions Income
       description: |
         This endpoint allows the developer to delete foreign pensions and overseas pension contributions. 
         A National Insurance number and tax year must be provided.
