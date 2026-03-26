@@ -33,17 +33,14 @@ servers:
 paths:
   /individuals/pensions-income/{nino}/{taxYear}:
     get:
-      summary: Retrieve Pensions Income
       security:
       - User-Restricted:
         - read:self-assessment
     put:
-      summary: Create and Amend Pensions Income
       security:
       - User-Restricted:
         - write:self-assessment
     delete:
-      summary: Delete Pensions Income
       security:
       - User-Restricted:
         - write:self-assessment
