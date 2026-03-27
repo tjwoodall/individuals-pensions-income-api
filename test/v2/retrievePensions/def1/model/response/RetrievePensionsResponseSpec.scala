@@ -71,7 +71,7 @@ class RetrievePensionsResponseSpec extends UnitSpec {
     """.stripMargin
   )
 
-  private val desJson = Json.parse(
+  private val downstreamJson = Json.parse(
     """
       |{
       |   "submittedOn": "2020-07-06T09:37:17Z",
@@ -170,7 +170,7 @@ class RetrievePensionsResponseSpec extends UnitSpec {
   "RetrievePensionsResponse" when {
     "read from valid JSON" should {
       "produce the expected RetrievePensionsResponse object" in {
-        desJson.as[Def1_RetrievePensionsResponse] shouldBe responseModel
+        downstreamJson.as[Def1_RetrievePensionsResponse] shouldBe responseModel
       }
     }
 

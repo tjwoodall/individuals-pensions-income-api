@@ -42,26 +42,6 @@ class AppConfigSpec extends UnitSpec {
       result shouldBe "http://localhost:9769"
     }
 
-    "return the DES config" in {
-      val expectedDesEnvHeaders = Some(
-        List(
-          "Des-Accept",
-          "Des-Gov-Test-Scenario",
-          "Des-Content-Type"
-        ))
-
-      simpleAppConfig.desBaseUrl shouldBe "http://127.0.0.1:6666"
-      simpleAppConfig.desEnv shouldBe "Prod"
-      simpleAppConfig.desToken shouldBe "DES-ABCD1234"
-      simpleAppConfig.desEnvironmentHeaders shouldBe expectedDesEnvHeaders
-      simpleAppConfig.desDownstreamConfig shouldBe DownstreamConfig(
-        "http://127.0.0.1:6666",
-        "Prod",
-        "DES-ABCD1234",
-        expectedDesEnvHeaders
-      )
-    }
-
     "return the IFS config" in {
       val expectedIfsEnvHeaders = Some(
         List(
@@ -430,14 +410,6 @@ class AppConfigSpec extends UnitSpec {
           |      mtd-id-lookup {
           |        host = localhost
           |        port = 9769
-          |      }
-          |
-          |      des {
-          |        host = 127.0.0.1
-          |        port = 6666
-          |        env = Prod
-          |        token = DES-ABCD1234
-          |        environmentHeaders = ["Des-Accept", "Des-Gov-Test-Scenario", "Des-Content-Type"]
           |      }
           |
           |      ifs {

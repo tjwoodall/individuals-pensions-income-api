@@ -16,6 +16,7 @@
 
 package v2.createAmendPensions
 
+import config.MockPensionsIncomeConfig
 import play.api.libs.json.Json
 import shared.config.MockAppConfig
 import shared.controllers.validators.Validator
@@ -24,7 +25,7 @@ import shared.utils.UnitSpec
 import v2.createAmendPensions.def1.Def1_CreateAmendPensionsValidator
 import v2.createAmendPensions.model.request.CreateAmendPensionsRequestData
 
-class CreateAmendPensionsValidatorFactorySpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
+class CreateAmendPensionsValidatorFactorySpec extends UnitSpec with MockAppConfig with MockPensionsIncomeConfig with JsonErrorValidators {
 
   private val validNino    = "AA123456A"
   private val validTaxYear = "2020-21"

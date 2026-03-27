@@ -47,23 +47,6 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
       Some("this-api")
     )
 
-  val requiredDesHeaders: Seq[(String, String)] = List(
-    "Authorization"     -> "Bearer des-token",
-    "Environment"       -> "des-environment",
-    "User-Agent"        -> "this-api",
-    "CorrelationId"     -> correlationId,
-    "Gov-Test-Scenario" -> "DEFAULT"
-  )
-
-  val allowedDesHeaders: Seq[String] = List(
-    "Accept",
-    "Gov-Test-Scenario",
-    "Content-Type",
-    "Location",
-    "X-Request-Timestamp",
-    "X-Session-Id"
-  )
-
   val requiredIfsHeaders: Seq[(String, String)] = List(
     "Authorization"     -> "Bearer ifs-token",
     "Environment"       -> "ifs-environment",
@@ -130,20 +113,6 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
           excludedHeaders = List("AnotherHeader" -> "HeaderValue")
         )
     }
-
-  }
-
-  protected trait DesTest extends ConnectorTest {
-
-    val requiredHeaders: Seq[(String, String)] = requiredDesHeaders
-
-    MockedAppConfig.desBaseUrl returns this.baseUrl
-    MockedAppConfig.desToken returns "des-token"
-    MockedAppConfig.desEnvironment returns "des-environment"
-    MockedAppConfig.desEnvironmentHeaders returns Some(allowedDesHeaders)
-
-    MockedAppConfig.desDownstreamConfig
-      .anyNumberOfTimes() returns DownstreamConfig(this.baseUrl, "des-environment", "des-token", Some(allowedDesHeaders))
 
   }
 

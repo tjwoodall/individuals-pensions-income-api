@@ -18,7 +18,7 @@ package shared.connectors
 
 import play.api.libs.json.Json
 import shared.config.{AppConfig, DownstreamConfig, MockAppConfig}
-import shared.connectors.DownstreamUri.{DesUri, IfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.mocks.MockHttpClient
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -36,107 +36,9 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
 
   private implicit val httpReads: HttpReads[DownstreamOutcome[Result]] = mock[HttpReads[DownstreamOutcome[Result]]]
 
-  "for DES" when {
-    "post" should {
-      "posts with the required des headers and returns the result" in new DesLocalTest {
-        implicit val hc: HeaderCarrier = HeaderCarrier(
-          otherHeaders = otherHeaders ++ List("Content-Type" -> "application/json")
-        )
-
-        val requiredDesHeadersPost: Seq[(String, String)] = requiredDesHeaders ++ List("Content-Type" -> "application/json")
-
-        MockedHttpClient
-          .post(
-            absoluteUrl,
-            config = dummyHeaderCarrierConfig,
-            body,
-            requiredHeaders = requiredDesHeadersPost,
-            excludedHeaders = List("AnotherHeader" -> "HeaderValue"))
-          .returns(Future.successful(outcome))
-
-        await(connector.post(body, DesUri[Result](url))) shouldBe outcome
-      }
-    }
-
-    "get" should {
-      "get with the required des headers and return the result" in new DesLocalTest {
-        implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ List("Content-Type" -> "application/json"))
-
-        MockedHttpClient
-          .get(
-            absoluteUrl,
-            config = dummyHeaderCarrierConfig,
-            parameters = qps,
-            requiredHeaders = requiredDesHeaders,
-            excludedHeaders = List("AnotherHeader" -> "HeaderValue"))
-          .returns(Future.successful(outcome))
-
-        await(connector.get(DesUri[Result](url), queryParams = qps)) shouldBe outcome
-      }
-    }
-
-    "delete" should {
-      "delete with the required des headers and return the result" in new DesLocalTest {
-        implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ List("Content-Type" -> "application/json"))
-
-        MockedHttpClient
-          .delete(
-            absoluteUrl,
-            config = dummyHeaderCarrierConfig,
-            requiredHeaders = requiredDesHeaders,
-            excludedHeaders = List("AnotherHeader" -> "HeaderValue"))
-          .returns(Future.successful(outcome))
-
-        await(connector.delete(DesUri[Result](url))) shouldBe outcome
-      }
-    }
-
-    "put" should {
-      "put with the required des headers and return result" in new DesLocalTest {
-        implicit val hc: HeaderCarrier                   = HeaderCarrier(otherHeaders = otherHeaders ++ List("Content-Type" -> "application/json"))
-        val requiredDesHeadersPut: Seq[(String, String)] = requiredDesHeaders ++ List("Content-Type" -> "application/json")
-
-        MockedHttpClient
-          .put(
-            absoluteUrl,
-            config = dummyHeaderCarrierConfig,
-            body,
-            requiredHeaders = requiredDesHeadersPut,
-            excludedHeaders = List("AnotherHeader" -> "HeaderValue"))
-          .returns(Future.successful(outcome))
-
-        await(connector.put(body, DesUri[Result](url))) shouldBe outcome
-      }
-    }
-
-    "content-type header already present and set to be passed through" should {
-      "override (not duplicate) the value" when {
-        testNoDuplicatedContentType("Content-Type" -> "application/user-type")
-        testNoDuplicatedContentType("content-type" -> "application/user-type")
-
-        def testNoDuplicatedContentType(userContentType: (String, String)): Unit =
-          s"for user content type header $userContentType" in new DesLocalTest {
-            implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ List(userContentType))
-
-            MockedHttpClient
-              .put(
-                absoluteUrl,
-                config = dummyHeaderCarrierConfig,
-                body,
-                requiredHeaders = requiredDesHeaders ++ List("Content-Type" -> "application/json"),
-                excludedHeaders = List(userContentType)
-              )
-              .returns(Future.successful(outcome))
-
-            await(connector.put(body, DesUri[Result](url))) shouldBe outcome
-          }
-      }
-    }
-  }
-
   "for IFS" when {
     "post" should {
-      "post with the required ifs headers and return the result" in new IfsLocalTest {
+      "post with the required IFS headers and return the result" in new IfsLocalTest {
         implicit val hc: HeaderCarrier                    = HeaderCarrier(otherHeaders = otherHeaders ++ List("Content-Type" -> "application/json"))
         val requiredIfsHeadersPost: Seq[(String, String)] = requiredIfsHeaders ++ List("Content-Type" -> "application/json")
 
@@ -171,7 +73,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     }
 
     "delete" should {
-      "delete with the required des headers and return the result" in new IfsLocalTest {
+      "delete with the required IFS headers and return the result" in new IfsLocalTest {
         implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ List("Content-Type" -> "application/json"))
 
         MockedHttpClient
@@ -187,7 +89,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     }
 
     "put" should {
-      "put with the required des headers and return result" in new IfsLocalTest {
+      "put with the required IFS headers and return result" in new IfsLocalTest {
         implicit val hc: HeaderCarrier                   = HeaderCarrier(otherHeaders = otherHeaders ++ List("Content-Type" -> "application/json"))
         val requiredIfsHeadersPut: Seq[(String, String)] = requiredIfsHeaders ++ List("Content-Type" -> "application/json")
 
@@ -303,22 +205,6 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
   }
 
   private case class Result(value: Int)
-
-  private class DesLocalTest extends MockHttpClient with MockAppConfig {
-
-    val connector: BaseDownstreamConnector = new BaseDownstreamConnector {
-      val http: HttpClientV2   = mockHttpClient
-      val appConfig: AppConfig = mockAppConfig
-    }
-
-    MockedAppConfig.desBaseUrl returns baseUrl
-    MockedAppConfig.desToken returns "des-token"
-    MockedAppConfig.desEnvironment returns "des-environment"
-    MockedAppConfig.desEnvironmentHeaders returns Some(allowedDesHeaders)
-    MockedAppConfig.desDownstreamConfig.anyNumberOfTimes() returns DownstreamConfig(baseUrl, "des-environment", "des-token", Some(allowedDesHeaders))
-
-    val qps: Seq[(String, String)] = List("param1" -> "value1")
-  }
 
   private class IfsLocalTest extends MockHttpClient with MockAppConfig {
 

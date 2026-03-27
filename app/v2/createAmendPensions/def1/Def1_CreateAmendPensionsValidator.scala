@@ -18,16 +18,21 @@ package v2.createAmendPensions.def1
 
 import cats.data.Validated
 import cats.implicits.*
+import config.PensionsIncomeConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinimum}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v2.createAmendPensions.def1.Def1_CreateAmendPensionsRulesValidator.validateBusinessRules
-import v2.createAmendPensions.def1.Def1_CreateAmendPensionsValidator.{resolveJson, resolveTaxYear}
+import v2.createAmendPensions.def1.Def1_CreateAmendPensionsValidator.resolveJson
 import v2.createAmendPensions.model.request.{CreateAmendPensionsRequestData, Def1_CreateAmendPensionsRequestBody, Def1_CreateAmendPensionsRequestData}
 
-class Def1_CreateAmendPensionsValidator(nino: String, taxYear: String, body: JsValue) extends Validator[CreateAmendPensionsRequestData] {
+class Def1_CreateAmendPensionsValidator(nino: String, taxYear: String, body: JsValue)(implicit pensionsIncomeConfig: PensionsIncomeConfig)
+    extends Validator[CreateAmendPensionsRequestData] {
+
+  private lazy val minTaxYear     = pensionsIncomeConfig.minimumPermittedTaxYear()
+  private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(minTaxYear))
 
   def validate: Validated[Seq[MtdError], CreateAmendPensionsRequestData] =
     (
@@ -39,6 +44,5 @@ class Def1_CreateAmendPensionsValidator(nino: String, taxYear: String, body: JsV
 }
 
 object Def1_CreateAmendPensionsValidator {
-  private val resolveJson         = new ResolveNonEmptyJsonObject[Def1_CreateAmendPensionsRequestBody]()
-  private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(2020))
+  private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAmendPensionsRequestBody]()
 }

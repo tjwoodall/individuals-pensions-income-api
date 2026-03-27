@@ -69,7 +69,7 @@ class CreateAmendPensionsRequestDataBodySpec extends UnitSpec {
     """.stripMargin
   )
 
-  private val desJson = Json.parse(
+  private val downstreamJson = Json.parse(
     """
       |{
       |   "foreignPension": [
@@ -217,7 +217,7 @@ class CreateAmendPensionsRequestDataBodySpec extends UnitSpec {
 
     "written to JSON" should {
       "produce the expected JsObject" in {
-        Json.toJson(requestBodyModel) shouldBe desJson
+        Json.toJson(requestBodyModel) shouldBe downstreamJson
       }
     }
   }

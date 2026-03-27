@@ -36,7 +36,7 @@ class OverseasPensionContributionsSpec extends UnitSpec {
     """.stripMargin
   )
 
-  private val desJson = Json.parse(
+  private val downstreamJson = Json.parse(
     """
       |{
       |   "customerReference": "PENSIONINCOME245",
@@ -65,7 +65,7 @@ class OverseasPensionContributionsSpec extends UnitSpec {
   "OverseasPensionContributionsItem" when {
     "read from valid JSON" should {
       "produce the expected OverseasPensionContributionsItem object" in {
-        desJson.as[OverseasPensionContributions] shouldBe model
+        downstreamJson.as[OverseasPensionContributions] shouldBe model
       }
     }
 

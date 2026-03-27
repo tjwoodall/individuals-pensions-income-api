@@ -38,15 +38,6 @@ class AppConfig @Inject() (config: ServicesConfig, protected[config] val configu
   // MTD ID Lookup Config
   def mtdIdBaseUrl: String = config.baseUrl("mtd-id-lookup")
 
-  // Des Config
-  def desBaseUrl: String                         = config.baseUrl("des")
-  def desEnv: String                             = config.getString("microservice.services.des.env")
-  def desToken: String                           = config.getString("microservice.services.des.token")
-  def desEnvironmentHeaders: Option[Seq[String]] = configuration.getOptional[Seq[String]]("microservice.services.des.environmentHeaders")
-
-  def desDownstreamConfig: DownstreamConfig =
-    DownstreamConfig(baseUrl = desBaseUrl, env = desEnv, token = desToken, environmentHeaders = desEnvironmentHeaders)
-
   // IFS Config
   def ifsBaseUrl: String                         = config.baseUrl("ifs")
   def ifsEnv: String                             = config.getString("microservice.services.ifs.env")

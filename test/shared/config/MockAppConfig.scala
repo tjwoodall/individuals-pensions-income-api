@@ -31,14 +31,6 @@ trait MockAppConfig extends TestSuite with MockFactory {
     // MTD ID Lookup Config
     def mtdIdBaseUrl: CallHandler0[String] = (() => mockAppConfig.mtdIdBaseUrl: String).expects()
 
-    // DES Config
-    def desBaseUrl: CallHandler0[String]                         = (() => mockAppConfig.desBaseUrl: String).expects()
-    def desToken: CallHandler0[String]                           = (() => mockAppConfig.desToken: String).expects()
-    def desEnv: CallHandler0[String]                             = (() => mockAppConfig.desEnv: String).expects()
-    def desEnvironment: CallHandler0[String]                     = (() => mockAppConfig.desEnv: String).expects()
-    def desEnvironmentHeaders: CallHandler0[Option[Seq[String]]] = (() => mockAppConfig.desEnvironmentHeaders: Option[Seq[String]]).expects()
-    def desDownstreamConfig: CallHandler0[DownstreamConfig]      = (() => mockAppConfig.desDownstreamConfig: DownstreamConfig).expects()
-
     // IFS Config
     def ifsBaseUrl: CallHandler0[String]                         = (() => mockAppConfig.ifsBaseUrl: String).expects()
     def ifsToken: CallHandler0[String]                           = (() => mockAppConfig.ifsToken: String).expects()

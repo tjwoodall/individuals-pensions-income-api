@@ -20,7 +20,7 @@ import play.api.http.{HeaderNames, MimeTypes}
 import play.api.libs.json.*
 import play.api.libs.ws.*
 import shared.config.{AppConfig, DownstreamConfig}
-import shared.connectors.DownstreamUri.{DesUri, IfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.utils.{Logging, UrlUtils}
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, StringContextOps}
@@ -143,7 +143,6 @@ trait BaseDownstreamConnector extends Logging {
 
   private def configFor[Resp](uri: DownstreamUri[Resp]) =
     uri match {
-      case DesUri(_) => appConfig.desDownstreamConfig
       case IfsUri(_) => appConfig.ifsDownstreamConfig
     }
 

@@ -35,4 +35,6 @@ class PensionsIncomeConfig @Inject() (
     PensionsIncomeFeatureSwitches()
   }
 
+  def minimumPermittedTaxYear(): Int = configuration.get[Int]("minimumPermittedTaxYear")
+
 }

@@ -16,17 +16,20 @@
 
 package v2.createAmendPensions.def1
 
+import config.{MockPensionsIncomeConfig, PensionsIncomeConfig}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import shared.config.MockAppConfig
+import shared.controllers.validators.Validator
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
+import v2.createAmendPensions.CreateAmendPensionsValidatorFactory
 import v2.createAmendPensions.def1.model.request.{CreateAmendForeignPensionsItem, CreateAmendOverseasPensionContributions}
 import v2.createAmendPensions.model.request.{CreateAmendPensionsRequestData, Def1_CreateAmendPensionsRequestBody, Def1_CreateAmendPensionsRequestData}
 import v2.models.*
 
-class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
+class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValidators with MockPensionsIncomeConfig with MockAppConfig {
 
   private implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
   private val validNino                      = "AA123456A"
@@ -369,11 +372,25 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
     Some(parsedCreateAmendOverseasPensionContributions)
   )
 
-  private def validator(nino: String, taxYear: String, body: JsValue) = new Def1_CreateAmendPensionsValidator(nino, taxYear, body)
+  class Test extends MockPensionsIncomeConfig {
+
+    implicit val appConfig: PensionsIncomeConfig = mockPensionsIncomeConfig
+
+    MockedPensionsIncomeConfig
+      .minimumPermittedTaxYear()
+      .returns(2020)
+      .anyNumberOfTimes()
+
+    val validatorFactory = new CreateAmendPensionsValidatorFactory()
+
+    def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendPensionsRequestData] =
+      validatorFactory.validator(nino, taxYear, body)
+
+  }
 
   "running a validation" should {
     "return no errors" when {
-      "a valid request is supplied" in {
+      "a valid request is supplied" in new Test {
 
         val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
           validator(validNino, validTaxYear, validRequestBodyJson).validateAndWrapResult()
@@ -383,7 +400,7 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
     }
 
     "return NinoFormatError error" when {
-      "an invalid nino is supplied" in {
+      "an invalid nino is supplied" in new Test {
 
         val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
           validator("invalid", validTaxYear, validRequestBodyJson).validateAndWrapResult()
@@ -393,7 +410,7 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
     }
 
     "return TaxYearFormatError error" when {
-      "an invalid tax year is supplied" in {
+      "an invalid tax year is supplied" in new Test {
 
         val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
           validator(validNino, "201831", validRequestBodyJson).validateAndWrapResult()
@@ -402,7 +419,7 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
       }
     }
 
-    "return RuleTaxYearRangeInvalidError error for an invalid tax year range" in {
+    "return RuleTaxYearRangeInvalidError error for an invalid tax year range" in new Test {
 
       val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
         validator(validNino, "2021-24", validRequestBodyJson).validateAndWrapResult()
@@ -410,7 +427,7 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
       result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
     }
 
-    "return RuleTaxYearNotSupportedError error for an unsupported tax year" in {
+    "return RuleTaxYearNotSupportedError error for an unsupported tax year" in new Test {
 
       val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
         validator(validNino, "2018-19", validRequestBodyJson).validateAndWrapResult()
@@ -418,7 +435,7 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
       result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
     }
 
-    "return multiple errors for multiple invalid request parameters" in {
+    "return multiple errors for multiple invalid request parameters" in new Test {
 
       val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
         validator("invalid", "invalid", validRequestBodyJson).validateAndWrapResult()
@@ -433,7 +450,7 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
     }
 
     "return RuleIncorrectOrEmptyBodyError error" when {
-      "an empty JSON body is submitted" in {
+      "an empty JSON body is submitted" in new Test {
 
         val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
           validator(validNino, validTaxYear, JsObject.empty).validateAndWrapResult()
@@ -441,7 +458,7 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError))
       }
 
-      "a non-empty JSON body is submitted without any expected fields" in {
+      "a non-empty JSON body is submitted without any expected fields" in new Test {
 
         val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
           validator(validNino, validTaxYear, nonsenseRequestBodyJson).validateAndWrapResult()
@@ -450,14 +467,14 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
 
       }
 
-      "the submitted request body is not in the correct format" in {
+      "the submitted request body is not in the correct format" in new Test {
 
         val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
           validator(validNino, validTaxYear, nonValidRequestBodyJson).validateAndWrapResult()
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/foreignPensions/0/taxTakenOff")))
       }
 
-      "the submitted request body has missing mandatory fields" in {
+      "the submitted request body has missing mandatory fields" in new Test {
 
         val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
           validator(validNino, validTaxYear, missingMandatoryFieldJson).validateAndWrapResult()
@@ -470,7 +487,7 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
     }
 
     "return CustomerRefFormatError error" when {
-      "an incorrectly formatted customer reference is submitted" in {
+      "an incorrectly formatted customer reference is submitted" in new Test {
 
         val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
           validator(validNino, validTaxYear, invalidCustomerRefRequestBodyJson).validateAndWrapResult()
@@ -480,7 +497,7 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
     }
 
     "return QOPSRefFormatError error" when {
-      "an incorrectly formatted migrantMemReliefQopsRefNo is submitted" in {
+      "an incorrectly formatted migrantMemReliefQopsRefNo is submitted" in new Test {
 
         val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
           validator(validNino, validTaxYear, invalidQOPSRefRequestBodyJson).validateAndWrapResult()
@@ -489,7 +506,7 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
     }
 
     "return SF74RefFormatError error" when {
-      "an incorrectly formatted sf74reference is submitted" in {
+      "an incorrectly formatted sf74reference is submitted" in new Test {
 
         val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
           validator(validNino, validTaxYear, invalidSF74RefRequestBodyJson).validateAndWrapResult()
@@ -498,7 +515,7 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
     }
 
     "return DoubleTaxationArticleFormatError error" when {
-      "an incorrectly formatted dblTaxationArticle is submitted" in {
+      "an incorrectly formatted dblTaxationArticle is submitted" in new Test {
 
         val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
           validator(validNino, validTaxYear, invalidDoubleTaxationArticleRequestBodyJson).validateAndWrapResult()
@@ -508,7 +525,7 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
     }
 
     "return DoubleTaxationTreatyFormatError error" when {
-      "an incorrectly formatted dblTaxationTreaty is submitted" in {
+      "an incorrectly formatted dblTaxationTreaty is submitted" in new Test {
 
         val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
           validator(validNino, validTaxYear, invalidDoubleTaxationTreatyRequestBodyJson).validateAndWrapResult()
@@ -518,7 +535,7 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
     }
 
     "return CountryCodeFormatError error" when {
-      "an incorrectly formatted dblTaxationCountryCode is submitted" in {
+      "an incorrectly formatted dblTaxationCountryCode is submitted" in new Test {
 
         val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
           validator(validNino, validTaxYear, invalidDoubleTaxationCountryCodeRequestBodyJson).validateAndWrapResult()
@@ -527,7 +544,7 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
     }
 
     "return CountryCodeRuleError error" when {
-      "an invalid country code is submitted" in {
+      "an invalid country code is submitted" in new Test {
 
         val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
           validator(validNino, validTaxYear, invalidCountryCodeRuleRequestBodyJson).validateAndWrapResult()
@@ -537,7 +554,7 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
     }
 
     "return FORMAT_VALUE error (single failure)" when {
-      "one field fails value validation (foreign pensions)" in {
+      "one field fails value validation (foreign pensions)" in new Test {
 
         val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
           validator(validNino, validTaxYear, invalidForeignPensionsRequestBodyJson).validateAndWrapResult()
@@ -545,7 +562,7 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
 
       }
 
-      "one field fails value validation (Overseas Pension Contributions)" in {
+      "one field fails value validation (Overseas Pension Contributions)" in new Test {
 
         val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
           validator(validNino, validTaxYear, invalidOverseasPensionContributionsRequestBodyJson).validateAndWrapResult()
@@ -554,7 +571,7 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
     }
 
     "return ValueFormatError error (multiple failures)" when {
-      "multiple fields fail value validation" in {
+      "multiple fields fail value validation" in new Test {
 
         val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
           validator(validNino, validTaxYear, allInvalidValueRequestBodyJson).validateAndWrapResult()
@@ -596,7 +613,7 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
     }
 
     "return multiple errors" when {
-      "request supplied has multiple errors (path parameters)" in {
+      "request supplied has multiple errors (path parameters)" in new Test {
 
         val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
           validator("invalid", "20178", JsObject.empty).validateAndWrapResult()

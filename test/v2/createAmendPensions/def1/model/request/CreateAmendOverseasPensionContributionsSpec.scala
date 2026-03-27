@@ -36,7 +36,7 @@ class CreateAmendOverseasPensionContributionsSpec extends UnitSpec {
     """.stripMargin
   )
 
-  private val desJson = Json.parse(
+  private val downstreamJson = Json.parse(
     """
       |{
       |   "customerReference": "PENSIONINCOME245",
@@ -78,7 +78,7 @@ class CreateAmendOverseasPensionContributionsSpec extends UnitSpec {
 
     "written to JSON" should {
       "produce the expected JsObject" in {
-        Json.toJson(model) shouldBe desJson
+        Json.toJson(model) shouldBe downstreamJson
       }
     }
   }

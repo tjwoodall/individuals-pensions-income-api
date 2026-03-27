@@ -16,6 +16,7 @@
 
 package config
 
+import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
 
@@ -23,6 +24,10 @@ trait MockPensionsIncomeConfig extends TestSuite with MockFactory {
 
   implicit val mockPensionsIncomeConfig: PensionsIncomeConfig = mock[PensionsIncomeConfig]
 
-  object MockedPensionsIncomeConfig {}
+  object MockedPensionsIncomeConfig {
+
+    def minimumPermittedTaxYear(): CallHandler[Int] = (() => mockPensionsIncomeConfig.minimumPermittedTaxYear()).expects()
+
+  }
 
 }
