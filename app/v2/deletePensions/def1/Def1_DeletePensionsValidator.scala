@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,23 +18,22 @@ package v2.deletePensions.def1
 
 import cats.data.Validated
 import cats.implicits.*
+import config.PensionsIncomeConfig
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v2.deletePensions.def1.Def1_DeletePensionsValidator.resolveTaxYear
 import v2.deletePensions.model.request.{Def1_DeletePensionsRequestData, DeletePensionsRequestData}
 
-class Def1_DeletePensionsValidator(nino: String, taxYear: String) extends Validator[DeletePensionsRequestData] {
+class Def1_DeletePensionsValidator(nino: String, taxYear: String)(implicit pensionsIncomeConfig: PensionsIncomeConfig)
+    extends Validator[DeletePensionsRequestData] {
+
+  private lazy val minTaxYear     = pensionsIncomeConfig.minimumPermittedTaxYear()
+  private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.ending(minTaxYear))
 
   def validate: Validated[Seq[MtdError], DeletePensionsRequestData] = (
     ResolveNino(nino),
     resolveTaxYear(taxYear)
   ).mapN(Def1_DeletePensionsRequestData.apply)
-
-}
-
-object Def1_DeletePensionsValidator {
-  private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(2020))
 
 }

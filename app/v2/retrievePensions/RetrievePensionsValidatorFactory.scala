@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,14 @@
 
 package v2.retrievePensions
 
+import config.PensionsIncomeConfig
 import shared.controllers.validators.Validator
 import v2.retrievePensions.def1.Def1_RetrievePensionsValidator
 import v2.retrievePensions.model.request.RetrievePensionsRequestData
 
-class RetrievePensionsValidatorFactory {
+import javax.inject.Inject
+
+class RetrievePensionsValidatorFactory @Inject() (implicit pensionsIncomeConfig: PensionsIncomeConfig) {
 
   def validator(nino: String, taxYear: String): Validator[RetrievePensionsRequestData] =
     new Def1_RetrievePensionsValidator(nino, taxYear)

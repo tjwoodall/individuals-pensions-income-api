@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,14 @@
 
 package v2.deletePensions
 
+import config.PensionsIncomeConfig
 import shared.controllers.validators.Validator
 import v2.deletePensions.def1.Def1_DeletePensionsValidator
 import v2.deletePensions.model.request.DeletePensionsRequestData
 
-class DeletePensionsValidatorFactory {
+import javax.inject.Inject
+
+class DeletePensionsValidatorFactory @Inject() (implicit pensionsIncomeConfig: PensionsIncomeConfig) {
 
   def validator(nino: String, taxYear: String): Validator[DeletePensionsRequestData] =
     new Def1_DeletePensionsValidator(nino, taxYear)

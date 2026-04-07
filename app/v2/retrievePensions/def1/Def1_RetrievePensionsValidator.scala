@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,18 @@ package v2.retrievePensions.def1
 
 import cats.data.Validated
 import cats.implicits.*
+import config.PensionsIncomeConfig
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v2.retrievePensions.def1.Def1_RetrievePensionsValidator.resolveTaxYear
 import v2.retrievePensions.model.request.{Def1_RetrievePensionsRequestData, RetrievePensionsRequestData}
 
-class Def1_RetrievePensionsValidator(nino: String, taxYear: String) extends Validator[RetrievePensionsRequestData] {
+class Def1_RetrievePensionsValidator(nino: String, taxYear: String)(implicit pensionsIncomeConfig: PensionsIncomeConfig)
+    extends Validator[RetrievePensionsRequestData] {
+
+  private lazy val minTaxYear     = pensionsIncomeConfig.minimumPermittedTaxYear()
+  private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.ending(minTaxYear))
 
   def validate: Validated[Seq[MtdError], RetrievePensionsRequestData] =
     (
@@ -33,8 +37,4 @@ class Def1_RetrievePensionsValidator(nino: String, taxYear: String) extends Vali
       resolveTaxYear(taxYear)
     ).mapN(Def1_RetrievePensionsRequestData.apply)
 
-}
-
-object Def1_RetrievePensionsValidator {
-  private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(2020))
 }
