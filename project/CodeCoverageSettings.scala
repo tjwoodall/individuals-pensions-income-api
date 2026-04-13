@@ -32,10 +32,9 @@ object CodeCoverageSettings {
     ".*\\$anon.*"
   )
   
-  val settings: Seq[Setting[_]] = List(
+  val settings: Seq[Setting[?]] = List(
     ScoverageKeys.coverageExcludedPackages := excludedPackages.mkString(";"),
-    ScoverageKeys.coverageExcludedFiles := ".*PensionsIncomePlayModule;.*DocumentationController",
-    ScoverageKeys.coverageMinimumStmtTotal := 90, // TODO increase to 95% when the shared code is migrated over.
+    ScoverageKeys.coverageMinimumStmtTotal := 97,
     ScoverageKeys.coverageFailOnMinimum    := true,
     ScoverageKeys.coverageHighlighting     := true
   )

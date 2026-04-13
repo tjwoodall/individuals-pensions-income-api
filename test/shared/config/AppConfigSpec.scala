@@ -62,6 +62,16 @@ class AppConfigSpec extends UnitSpec {
         expectedIfsEnvHeaders
       )
     }
+    "return the apiDocumentationUrl" when {
+      "it is not specified" in {
+        val changedAppConfig = appConfig("", None)
+        changedAppConfig.apiDocumentationUrl shouldBe s"https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/${changedAppConfig.appName}"
+      }
+      "it is specified" in {
+        val changedAppConfig = appConfig("", Some("test123"))
+        changedAppConfig.apiDocumentationUrl shouldBe "test123"
+      }
+    }
   }
 
   "endpointsEnabled" when {

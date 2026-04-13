@@ -60,3 +60,9 @@ case class APIDefinition(name: String,
 object APIDefinition {
   implicit val formatAPIDefinition: OFormat[APIDefinition] = Json.format[APIDefinition]
 }
+
+case class Definition(api: APIDefinition)
+
+object Definition {
+  given OFormat[Definition] = Json.format[Definition]
+}
