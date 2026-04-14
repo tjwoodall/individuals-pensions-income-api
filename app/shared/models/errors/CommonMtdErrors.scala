@@ -35,8 +35,6 @@ object BusinessIdFormatError extends MtdError("FORMAT_BUSINESS_ID", "The Busines
 
 object TransactionIdFormatError extends MtdError(code = "FORMAT_TRANSACTION_ID", message = "The transaction ID format is invalid", BAD_REQUEST)
 
-object IdFormatError extends MtdError(code = "FORMAT_ID", message = "The ID format is invalid", BAD_REQUEST)
-
 object CountryCodeFormatError extends MtdError("FORMAT_COUNTRY_CODE", "The provided Country code is invalid", BAD_REQUEST)
 
 object ValueFormatError extends MtdError("FORMAT_VALUE", "The value must be between 0 and 99999999999.99", BAD_REQUEST) {
@@ -58,8 +56,6 @@ object BadRequestError extends MtdError("INVALID_REQUEST", "Invalid request", BA
 object GatewayTimeoutError extends MtdError("GATEWAY_TIMEOUT", "The request has timed out", GATEWAY_TIMEOUT)
 
 object BVRError extends MtdError("BUSINESS_ERROR", "Business validation error", BAD_REQUEST)
-
-object ServiceUnavailableError extends MtdError("SERVICE_UNAVAILABLE", "Internal server error", INTERNAL_SERVER_ERROR)
 
 object InvalidHttpMethodError extends MtdError("INVALID_HTTP_METHOD", "Invalid HTTP method", METHOD_NOT_ALLOWED)
 

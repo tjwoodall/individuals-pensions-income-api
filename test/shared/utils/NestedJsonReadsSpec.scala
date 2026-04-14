@@ -111,13 +111,13 @@ class NestedJsonReadsSpec extends UnitSpec {
   }
 
   "Path with an invalid data type" should {
-    "return a None " in {
+    "return a None" in {
       thirdOutput.validate[Test] shouldBe a[JsError]
     }
   }
 
   "Empty path" should {
-    "return a None " in {
+    "return a None" in {
       fourthOutput.validate[Test] shouldBe a[JsSuccess[?]]
     }
   }

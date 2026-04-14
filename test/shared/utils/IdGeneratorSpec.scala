@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package shared.definition
+package shared.utils
 
-import play.api.libs.json.{Json, OFormat}
+class IdGeneratorSpec extends UnitSpec {
 
-case class PublishingException(message: String) extends Exception(message)
+  val generator        = new IdGenerator
+  val correlationRegex = "^[A-Za-z0-9\\-]{36}$"
 
-case class Definition(api: APIDefinition)
+  "IdGenerator" should {
+    "generate a correlation id" when {
+      "getCorrelationId is called" in {
+        generator.generateCorrelationId.matches(correlationRegex) shouldBe true
+      }
+    }
+  }
 
-object Definition {
-  implicit val formatDefinition: OFormat[Definition] = Json.format[Definition]
 }
