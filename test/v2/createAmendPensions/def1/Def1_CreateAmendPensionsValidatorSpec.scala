@@ -543,12 +543,12 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
       }
     }
 
-    "return CountryCodeRuleError error" when {
+    "return RuleCountryCodeError error" when {
       "an invalid country code is submitted" in new Test {
 
         val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
           validator(validNino, validTaxYear, invalidCountryCodeRuleRequestBodyJson).validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, CountryCodeRuleError.withPath("/foreignPensions/0/countryCode")))
+        result shouldBe Left(ErrorWrapper(correlationId, RuleCountryCodeError.withPath("/foreignPensions/0/countryCode")))
 
       }
     }
@@ -605,7 +605,7 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
                   "/overseasPensionContributions/1/exemptEmployersPensionContribs",
                   "/overseasPensionContributions/1/dblTaxationRelief"
                 )),
-                CountryCodeRuleError.withPaths(List("/foreignPensions/0/countryCode", "/overseasPensionContributions/0/dblTaxationCountryCode"))
+                RuleCountryCodeError.withPaths(List("/foreignPensions/0/countryCode", "/overseasPensionContributions/0/dblTaxationCountryCode"))
               )
             )
           ))

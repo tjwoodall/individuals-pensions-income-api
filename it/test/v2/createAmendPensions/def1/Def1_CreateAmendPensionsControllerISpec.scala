@@ -253,7 +253,7 @@ class Def1_CreateAmendPensionsControllerISpec extends IntegrationBaseSpec {
                 "/overseasPensionContributions/1/dblTaxationRelief"
               ))
           ),
-          CountryCodeRuleError.copy(
+          RuleCountryCodeError.copy(
             paths = Some(
               List(
                 "/foreignPensions/0/countryCode",
@@ -384,7 +384,7 @@ class Def1_CreateAmendPensionsControllerISpec extends IntegrationBaseSpec {
             |        },
             |        {
             |            "code": "RULE_COUNTRY_CODE",
-            |            "message": "The country code is not a valid ISO 3166-1 alpha-3 country code",
+            |            "message": "The country code is not a permitted ISO 3166-1 alpha-3 country code",
             |            "paths": [
             |                "/foreignPensions/1/countryCode",
             |                "/overseasPensionContributions/0/dblTaxationCountryCode"
@@ -750,7 +750,7 @@ class Def1_CreateAmendPensionsControllerISpec extends IntegrationBaseSpec {
           ))
       )
 
-      val countryCodeRuleError: MtdError = CountryCodeRuleError.copy(
+      val ruleCountryCodeError: MtdError = RuleCountryCodeError.copy(
         paths = Some(
           Seq(
             "/overseasPensionContributions/0/dblTaxationCountryCode",
@@ -856,7 +856,7 @@ class Def1_CreateAmendPensionsControllerISpec extends IntegrationBaseSpec {
           ("AA123456A", "2018-19", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError, None),
           ("AA123456A", "2019-21", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError, None),
           ("AA123456A", "2019-20", invalidCountryCodeRequestBodyJson, BAD_REQUEST, countryCodeError, None),
-          ("AA123456A", "2019-20", ruleCountryCodeRequestBodyJson, BAD_REQUEST, countryCodeRuleError, None),
+          ("AA123456A", "2019-20", ruleCountryCodeRequestBodyJson, BAD_REQUEST, ruleCountryCodeError, None),
           ("AA123456A", "2019-20", nonsenseRequestBody, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None),
           ("AA123456A", "2019-20", invalidCustomerRefRequestBodyJson, BAD_REQUEST, customerRefError, None),
           ("AA123456A", "2019-20", invalidQOPSRefRequestBodyJson, BAD_REQUEST, qopsRefError, None),
