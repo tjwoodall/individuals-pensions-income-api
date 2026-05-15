@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,9 @@
 package v2.createAmendPensions.def1
 
 import cats.data.Validated
-import cats.data.Validated.Invalid
 import cats.implicits.toFoldableOps
 import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolveParsedNumber}
+import shared.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolveParsedNumber, ResolveStringPattern}
 import shared.models.errors.MtdError
 import v2.createAmendPensions.def1.model.request.{CreateAmendForeignPensionsItem, CreateAmendOverseasPensionContributions}
 import v2.createAmendPensions.model.request.Def1_CreateAmendPensionsRequestData
@@ -68,29 +67,8 @@ object Def1_CreateAmendPensionsRulesValidator extends RulesValidator[Def1_Create
   private def resolveNonNegativeNumber(value: Option[BigDecimal], path: String): Validated[Seq[MtdError], Option[BigDecimal]] =
     ResolveParsedNumber()(value, path)
 
-  private def validateCustomerRef(ref: String, path: String, error: MtdError = CustomerRefFormatError): Validated[Seq[MtdError], Unit] =
-    if (stringRegex.matches(ref)) valid
-    else Invalid(List(error.withPath(path)))
-
-  private def validateQopsRef(ref: String, path: String, error: MtdError = QOPSRefFormatError): Validated[Seq[MtdError], Unit] =
-    if (stringRegex.matches(ref)) valid
-    else Invalid(List(error.withPath(path)))
-
-  private def validatesf74Ref(ref: String, path: String, error: MtdError = SF74RefFormatError): Validated[Seq[MtdError], Unit] =
-    if (stringRegex.matches(ref)) valid
-    else Invalid(List(error.withPath(path)))
-
-  private def validateDoubleTaxationArticle(ref: String,
-                                            path: String,
-                                            error: MtdError = DoubleTaxationArticleFormatError): Validated[Seq[MtdError], Unit] =
-    if (stringRegex.matches(ref)) valid
-    else Invalid(List(error.withPath(path)))
-
-  private def validateDoubleTaxationTreaty(ref: String,
-                                           path: String,
-                                           error: MtdError = DoubleTaxationTreatyFormatError): Validated[Seq[MtdError], Unit] =
-    if (stringRegex.matches(ref)) valid
-    else Invalid(List(error.withPath(path)))
+  private def resolveStringByPattern(value: Option[String], error: MtdError): Validated[Seq[MtdError], Option[String]] =
+    ResolveStringPattern(value, stringRegex, error)
 
   private def validatePensionsItem(foreignPensionsItem: CreateAmendForeignPensionsItem, index: Int): Validated[Seq[MtdError], Unit] = {
 
@@ -112,14 +90,14 @@ object Def1_CreateAmendPensionsRulesValidator extends RulesValidator[Def1_Create
     def path(suffix: String) = s"/overseasPensionContributions/$index/$suffix"
 
     combine(
-      pensionContributions.customerReference.traverse_(validateCustomerRef(_, path("customerReference"))),
+      resolveStringByPattern(pensionContributions.customerReference, CustomerRefFormatError.withPath(path("customerReference"))),
       resolveParsedNumber(pensionContributions.exemptEmployersPensionContribs, path("exemptEmployersPensionContribs")),
-      pensionContributions.migrantMemReliefQopsRefNo.traverse_(validateQopsRef(_, path("migrantMemReliefQopsRefNo"))),
+      resolveStringByPattern(pensionContributions.migrantMemReliefQopsRefNo, QOPSRefFormatError.withPath(path("migrantMemReliefQopsRefNo"))),
       resolveNonNegativeNumber(pensionContributions.dblTaxationRelief, path("dblTaxationRelief")),
       ResolveParsedCountryCode(pensionContributions.dblTaxationCountryCode, path("dblTaxationCountryCode")),
-      pensionContributions.dblTaxationArticle.traverse_(validateDoubleTaxationArticle(_, path("dblTaxationArticle"))),
-      pensionContributions.dblTaxationTreaty.traverse_(validateDoubleTaxationTreaty(_, path("dblTaxationTreaty"))),
-      pensionContributions.sf74reference.traverse_(validatesf74Ref(_, path("sf74reference")))
+      resolveStringByPattern(pensionContributions.dblTaxationArticle, DoubleTaxationArticleFormatError.withPath(path("dblTaxationArticle"))),
+      resolveStringByPattern(pensionContributions.dblTaxationTreaty, DoubleTaxationTreatyFormatError.withPath(path("dblTaxationTreaty"))),
+      resolveStringByPattern(pensionContributions.sf74reference, SF74RefFormatError.withPath(path("sf74reference")))
     )
 
   }
