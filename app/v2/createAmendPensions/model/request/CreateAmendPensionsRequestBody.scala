@@ -19,7 +19,6 @@ package v2.createAmendPensions.model.request
 import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, OWrites, Reads}
 import shared.utils.JsonWritesUtil
-import utils.JsonUtils
 import v2.createAmendPensions.def1.model.request.{CreateAmendForeignPensionsItem, CreateAmendOverseasPensionContributions}
 
 sealed trait CreateAmendPensionsRequestBody
@@ -36,12 +35,11 @@ case class Def1_CreateAmendPensionsRequestBody(foreignPensions: Option[Seq[Creat
                                                overseasPensionContributions: Option[Seq[CreateAmendOverseasPensionContributions]])
     extends CreateAmendPensionsRequestBody
 
-object Def1_CreateAmendPensionsRequestBody extends JsonUtils {
-  val empty: Def1_CreateAmendPensionsRequestBody = Def1_CreateAmendPensionsRequestBody(None, None)
+object Def1_CreateAmendPensionsRequestBody {
 
   implicit val reads: Reads[Def1_CreateAmendPensionsRequestBody] = (
-    (JsPath \ "foreignPensions").readNullable[Seq[CreateAmendForeignPensionsItem]].mapEmptySeqToNone and
-      (JsPath \ "overseasPensionContributions").readNullable[Seq[CreateAmendOverseasPensionContributions]].mapEmptySeqToNone
+    (JsPath \ "foreignPensions").readNullable[Seq[CreateAmendForeignPensionsItem]] and
+      (JsPath \ "overseasPensionContributions").readNullable[Seq[CreateAmendOverseasPensionContributions]]
   )(Def1_CreateAmendPensionsRequestBody.apply)
 
   implicit val writes: OWrites[Def1_CreateAmendPensionsRequestBody] = (

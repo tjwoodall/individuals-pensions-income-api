@@ -322,6 +322,15 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
     """.stripMargin
   )
 
+  private val emptyArrayWithinRequestBodyJson: JsValue = Json.parse(
+    """
+      |{
+      |   "foreignPensions": [],
+      |   "overseasPensionContributions": []
+      |}
+    """.stripMargin
+  )
+
   private val parsedNino    = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
@@ -483,6 +492,15 @@ class Def1_CreateAmendPensionsValidatorSpec extends UnitSpec with JsonErrorValid
           ErrorWrapper(
             correlationId,
             RuleIncorrectOrEmptyBodyError.withPaths(List("/foreignPensions/0/countryCode", "/foreignPensions/0/taxableAmount"))))
+      }
+
+      "the submitted request body contains an empty array" in new Test {
+
+        val result: Either[ErrorWrapper, CreateAmendPensionsRequestData] =
+          validator(validNino, validTaxYear, emptyArrayWithinRequestBodyJson).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPaths(List("/foreignPensions", "/overseasPensionContributions"))))
       }
     }
 

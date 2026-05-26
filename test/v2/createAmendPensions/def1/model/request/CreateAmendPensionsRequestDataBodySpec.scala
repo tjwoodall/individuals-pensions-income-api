@@ -173,11 +173,11 @@ class CreateAmendPensionsRequestDataBodySpec extends UnitSpec {
     "read from empty JSON" should {
       "produce the expected AmendPensionsRequestBody object" in {
         val emptyJson = JsObject.empty
-        emptyJson.as[Def1_CreateAmendPensionsRequestBody] shouldBe Def1_CreateAmendPensionsRequestBody.empty
+        emptyJson.as[Def1_CreateAmendPensionsRequestBody] shouldBe Def1_CreateAmendPensionsRequestBody(None, None)
       }
     }
 
-    "read from valid JSON with empty 'foreignPensions' and 'overseasPensionContributions' arrays" should {
+    "read from valid JSON with 'foreignPensions' and 'overseasPensionContributions' arrays" should {
       "produce the expected AmendPensionsRequestBody object" in {
         val json = Json.parse(
           """
@@ -188,7 +188,7 @@ class CreateAmendPensionsRequestDataBodySpec extends UnitSpec {
           """.stripMargin
         )
 
-        json.as[Def1_CreateAmendPensionsRequestBody] shouldBe requestBodyModel.copy(foreignPensions = None, overseasPensionContributions = None)
+        json.as[Def1_CreateAmendPensionsRequestBody] shouldBe Def1_CreateAmendPensionsRequestBody(Some(List()), Some(List()))
       }
     }
 
