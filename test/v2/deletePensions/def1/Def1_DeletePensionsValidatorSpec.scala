@@ -16,12 +16,12 @@
 
 package v2.deletePensions.def1
 
+import api.config.MockAppConfig
+import api.controllers.validators.Validator
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.utils.UnitSpec
 import config.{MockPensionsIncomeConfig, PensionsIncomeConfig}
-import shared.config.MockAppConfig
-import shared.controllers.validators.Validator
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.*
-import shared.utils.UnitSpec
 import v2.deletePensions.DeletePensionsValidatorFactory
 import v2.deletePensions.model.request.{Def1_DeletePensionsRequestData, DeletePensionsRequestData}
 

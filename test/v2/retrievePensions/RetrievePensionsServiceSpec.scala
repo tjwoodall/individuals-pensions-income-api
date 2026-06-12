@@ -16,12 +16,12 @@
 
 package v2.retrievePensions
 
+import api.controllers.EndpointLogContext
+import api.models.domain.{Nino, TaxYear, Timestamp}
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.services.ServiceSpec
 import play.api.libs.json.{Format, Json}
-import shared.controllers.EndpointLogContext
-import shared.models.domain.{Nino, TaxYear, Timestamp}
-import shared.models.errors.*
-import shared.models.outcomes.ResponseWrapper
-import shared.services.ServiceSpec
 import v2.retrievePensions.model.request.Def1_RetrievePensionsRequestData
 import v2.retrievePensions.model.response.{Def1_RetrievePensionsResponse, RetrievePensionsResponse}
 

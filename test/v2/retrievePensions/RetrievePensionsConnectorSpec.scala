@@ -16,9 +16,9 @@
 
 package v2.retrievePensions
 
-import shared.connectors.ConnectorSpec
-import shared.models.domain.{Nino, TaxYear, Timestamp}
-import shared.models.outcomes.ResponseWrapper
+import api.connectors.ConnectorSpec
+import api.models.domain.{Nino, TaxYear, Timestamp}
+import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v2.retrievePensions.model.request.Def1_RetrievePensionsRequestData
 import v2.retrievePensions.model.response.Def1_RetrievePensionsResponse

@@ -16,9 +16,9 @@
 
 package v2.retrievePensions.def1.model.response
 
+import api.models.domain.Timestamp
+import api.utils.UnitSpec
 import play.api.libs.json.{JsError, Json}
-import shared.models.domain.Timestamp
-import shared.utils.UnitSpec
 import v2.retrievePensions.model.response.Def1_RetrievePensionsResponse
 
 class RetrievePensionsResponseSpec extends UnitSpec {

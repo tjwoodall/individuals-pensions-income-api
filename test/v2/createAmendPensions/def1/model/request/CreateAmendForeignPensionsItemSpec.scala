@@ -16,8 +16,8 @@
 
 package v2.createAmendPensions.def1.model.request
 
+import api.utils.UnitSpec
 import play.api.libs.json.{JsError, JsObject, Json}
-import shared.utils.UnitSpec
 
 class CreateAmendForeignPensionsItemSpec extends UnitSpec {
 

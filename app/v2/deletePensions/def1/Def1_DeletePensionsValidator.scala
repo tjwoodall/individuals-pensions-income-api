@@ -16,13 +16,13 @@
 
 package v2.deletePensions.def1
 
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.*
 import config.PensionsIncomeConfig
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
 import v2.deletePensions.model.request.{Def1_DeletePensionsRequestData, DeletePensionsRequestData}
 
 class Def1_DeletePensionsValidator(nino: String, taxYear: String)(implicit pensionsIncomeConfig: PensionsIncomeConfig)

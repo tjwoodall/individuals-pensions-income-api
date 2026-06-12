@@ -16,8 +16,9 @@
 
 package config
 
+import api.config.{AppConfig, FeatureSwitches}
 import play.api.Configuration
-import shared.config.{AppConfig, FeatureSwitches}
+
 import javax.inject.{Inject, Singleton}
 
 /** Put API-specific config here...

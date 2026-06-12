@@ -16,9 +16,9 @@
 
 package v2.createAmendPensions
 
+import api.controllers.validators.Validator
 import config.PensionsIncomeConfig
 import play.api.libs.json.JsValue
-import shared.controllers.validators.Validator
 import v2.createAmendPensions.def1.Def1_CreateAmendPensionsValidator
 import v2.createAmendPensions.model.request.CreateAmendPensionsRequestData
 

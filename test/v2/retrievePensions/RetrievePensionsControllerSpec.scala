@@ -16,13 +16,13 @@
 
 package v2.retrievePensions
 
+import api.config.MockAppConfig
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.domain.{Nino, TaxYear, Timestamp}
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
 import play.api.Configuration
 import play.api.mvc.Result
-import shared.config.MockAppConfig
-import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.domain.{Nino, TaxYear, Timestamp}
-import shared.models.errors.*
-import shared.models.outcomes.ResponseWrapper
 import v2.retrievePensions.def1.model.RetrievePensionsControllerFixture
 import v2.retrievePensions.def1.model.response.{ForeignPensionsItem, OverseasPensionContributions}
 import v2.retrievePensions.model.request.Def1_RetrievePensionsRequestData

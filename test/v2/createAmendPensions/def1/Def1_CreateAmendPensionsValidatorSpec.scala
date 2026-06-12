@@ -16,14 +16,14 @@
 
 package v2.createAmendPensions.def1
 
+import api.config.MockAppConfig
+import api.controllers.validators.Validator
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import config.{MockPensionsIncomeConfig, PensionsIncomeConfig}
 import play.api.libs.json.{JsObject, JsValue, Json}
-import shared.config.MockAppConfig
-import shared.controllers.validators.Validator
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.*
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
 import v2.createAmendPensions.CreateAmendPensionsValidatorFactory
 import v2.createAmendPensions.def1.model.request.{CreateAmendForeignPensionsItem, CreateAmendOverseasPensionContributions}
 import v2.createAmendPensions.model.request.{CreateAmendPensionsRequestData, Def1_CreateAmendPensionsRequestBody, Def1_CreateAmendPensionsRequestData}

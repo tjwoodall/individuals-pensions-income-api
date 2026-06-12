@@ -16,11 +16,11 @@
 
 package v2.createAmendPensions
 
-import shared.config.MockAppConfig
-import shared.connectors.ConnectorSpec
-import shared.mocks.MockHttpClient
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.outcomes.ResponseWrapper
+import api.config.MockAppConfig
+import api.connectors.ConnectorSpec
+import api.mocks.MockHttpClient
+import api.models.domain.{Nino, TaxYear}
+import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v2.createAmendPensions.def1.model.request.{CreateAmendForeignPensionsItem, CreateAmendOverseasPensionContributions}
 import v2.createAmendPensions.model.request.{Def1_CreateAmendPensionsRequestBody, Def1_CreateAmendPensionsRequestData}

@@ -16,10 +16,10 @@
 
 package v2.retrievePensions.model.response
 
+import api.models.domain.Timestamp
+import api.utils.JsonWritesUtil
 import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
-import shared.models.domain.Timestamp
-import shared.utils.JsonWritesUtil
 import utils.JsonUtils
 import v2.retrievePensions.def1.model.response.{ForeignPensionsItem, OverseasPensionContributions}
 

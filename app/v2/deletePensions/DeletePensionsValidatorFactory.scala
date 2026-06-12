@@ -16,8 +16,8 @@
 
 package v2.deletePensions
 
+import api.controllers.validators.Validator
 import config.PensionsIncomeConfig
-import shared.controllers.validators.Validator
 import v2.deletePensions.def1.Def1_DeletePensionsValidator
 import v2.deletePensions.model.request.DeletePensionsRequestData
 

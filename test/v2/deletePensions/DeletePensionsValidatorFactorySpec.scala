@@ -16,9 +16,9 @@
 
 package v2.deletePensions
 
+import api.config.MockAppConfig
+import api.utils.UnitSpec
 import config.MockPensionsIncomeConfig
-import shared.config.MockAppConfig
-import shared.utils.UnitSpec
 import v2.deletePensions.def1.Def1_DeletePensionsValidator
 
 class DeletePensionsValidatorFactorySpec extends UnitSpec with MockAppConfig with MockPensionsIncomeConfig {

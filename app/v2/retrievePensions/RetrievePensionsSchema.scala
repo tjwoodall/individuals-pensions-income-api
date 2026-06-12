@@ -16,8 +16,8 @@
 
 package v2.retrievePensions
 
+import api.schema.DownstreamReadable
 import play.api.libs.json.Reads
-import shared.schema.DownstreamReadable
 import v2.retrievePensions.model.response.{Def1_RetrievePensionsResponse, RetrievePensionsResponse}
 
 sealed trait RetrievePensionsSchema extends DownstreamReadable[RetrievePensionsResponse]

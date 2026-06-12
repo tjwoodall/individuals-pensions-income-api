@@ -16,7 +16,7 @@
 
 package v2.deletePensions.model.request
 
-import shared.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear}
 import v2.deletePensions.DeletePensionsSchema
 
 sealed trait DeletePensionsRequestData {

@@ -16,8 +16,8 @@
 
 package v2.retrievePensions
 
+import api.controllers.validators.Validator
 import config.PensionsIncomeConfig
-import shared.controllers.validators.Validator
 import v2.retrievePensions.def1.Def1_RetrievePensionsValidator
 import v2.retrievePensions.model.request.RetrievePensionsRequestData
 
