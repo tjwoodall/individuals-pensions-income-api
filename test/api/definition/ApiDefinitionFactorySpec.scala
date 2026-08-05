@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,6 +67,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
         exceptionMessage shouldBe "deprecatedOn date is required for a deprecated version"
       }
     }
+
   }
 
   class Test extends MockHttpClient with MockAppConfig {
@@ -81,8 +82,9 @@ class ApiDefinitionFactorySpec extends UnitSpec {
           "description",
           "context",
           List("category"),
-          List(APIVersion(Version1, APIStatus.BETA, endpointsEnabled = true)),
-          None)
+          List(APIVersion(Version1, APIStatus.BETA, access = APIAccessType.PUBLIC, endpointsEnabled = true)),
+          None
+        )
       )
 
     }
