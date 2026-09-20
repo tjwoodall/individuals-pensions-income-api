@@ -38,8 +38,7 @@ responses:
         examples:
           default:
             description: Full Pensions Income
-            value:
-              $ref: './examples/retrieve_response.json'
+            externalValue: './examples/retrieve_response.json'
 
   "400":
     description: Bad request
